@@ -25,6 +25,20 @@ namespace Network
 
             // TODO: add session id as a custom header here
 
+            await getRequest.SendWebRequest();
+        
+            switch (getRequest.result)
+            {
+                case UnityWebRequest.Result.Success:
+                    Debug.Log($"success, game config response: {getRequest.downloadHandler.text}");
+                    gameConfig = JsonUtility.FromJson<GameConfig>(getRequest.downloadHandler.text);
+                    break;
+
+                default:
+                    Debug.LogError($"failure, reason: {getRequest.error}");
+                    break;
+            }
+        
             return gameConfig;
         }
     }
