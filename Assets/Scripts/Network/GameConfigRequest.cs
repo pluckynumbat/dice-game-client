@@ -10,7 +10,23 @@ namespace Network
     /// </summary>
     public class GameConfigRequest
     {
+        private const string ServerHost = "http://localhost";
+        private const string ServerPort = "8080";
+        private const string Endpoint = "/config/v1/game-config";
 
+        public async Task<GameConfig> Send(int timeout = 15)
+        {
+            GameConfig gameConfig = null;
+
+            string uri = $"{ServerHost}:{ServerPort}{Endpoint}";
+
+            UnityWebRequest getRequest = UnityWebRequest.Get(uri);
+            getRequest.timeout = timeout;
+
+            // TODO: add session id as a custom header here
+
+            return gameConfig;
+        }
     }
 
     [Serializable]
