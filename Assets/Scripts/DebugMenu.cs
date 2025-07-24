@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Will add all sorts of functionality here to help develop the game
+/// </summary>
 public class DebugMenu : MonoBehaviour
 {
     private bool isOpen;
