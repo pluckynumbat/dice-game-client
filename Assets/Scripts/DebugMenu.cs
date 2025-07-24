@@ -1,3 +1,4 @@
+using Network;
 using UnityEngine;
 
 /// <summary>
@@ -29,6 +30,12 @@ public class DebugMenu : MonoBehaviour
     
     private void DisplayDebugMenu()
     {
+        if (GUILayout.Button("Send a Game Config Request to the server",  GUILayout.MaxWidth(Screen.width)))
+        {
+            GameConfigRequest request = new GameConfigRequest();
+            _ = request.Send();
+        }
+        
         if (GUILayout.Button("Close the debug menu",  GUILayout.MaxWidth(Screen.width)))
         {
             ToggleState();
