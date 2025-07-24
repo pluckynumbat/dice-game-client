@@ -4,6 +4,8 @@ public class DebugMenu : MonoBehaviour
 {
     private bool isOpen;
 
+    private Vector2 scrollPosition = Vector2.zero;
+
     private void Awake()
     {
         enabled = false;
@@ -17,7 +19,9 @@ public class DebugMenu : MonoBehaviour
     
     private void OnGUI()
     {
+        scrollPosition = GUILayout.BeginScrollView(scrollPosition);
         DisplayDebugMenu();
+        GUILayout.EndScrollView();
     }
     
     private void DisplayDebugMenu()
