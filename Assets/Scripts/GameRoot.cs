@@ -1,3 +1,5 @@
+#define DEBUG_MENU_ENABLED // comment this when not in debug mode anymore
+
 using UnityEngine;
 
 /// <summary>
@@ -6,6 +8,8 @@ using UnityEngine;
 public class GameRoot : MonoBehaviour
 {
     public static GameRoot Instance { get; private set; }
+    
+    private DebugMenu debugMenu;
 
     private void Awake()
     {
@@ -20,5 +24,18 @@ public class GameRoot : MonoBehaviour
         }
         DontDestroyOnLoad(this);
         
+#if DEBUG_MENU_ENABLED
+        debugMenu = gameObject.AddComponent<DebugMenu>();
+#endif
+    }
+
+    private void Update()
+    {
+#if DEBUG_MENU_ENABLED
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            debugMenu?.ToggleState();
+        }
+#endif
     }
 }
