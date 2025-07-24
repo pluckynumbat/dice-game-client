@@ -24,6 +24,8 @@ namespace Network
             getRequest.timeout = timeout;
 
             // TODO: add session id as a custom header here
+            
+            // TODO: add more error / exception handling in the following code?
 
             await getRequest.SendWebRequest();
         
