@@ -32,6 +32,11 @@ namespace Presentation
     
         private ScreenType currentScreen;
 
+        public void InitializeScreens(GameRoot gameRoot)
+        {
+           // TODO: this will inject dependencies of the screens into them
+        }
+
         public void ChangeToScreen(ScreenType newScreenType)
         {
             if (currentScreen == newScreenType)
@@ -48,7 +53,6 @@ namespace Presentation
                     break;
             
                 case ScreenType.Main:
-                    MainScreen?.UpdateDisplay();
                     MainScreen?.gameObject.SetActive(true);
                     break;
             
