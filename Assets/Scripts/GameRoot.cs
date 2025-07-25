@@ -1,6 +1,7 @@
 #define DEBUG_MENU_ENABLED // comment this when not in debug mode anymore
 
 using Model;
+using Presentation;
 using UnityEngine;
 
 /// <summary>
@@ -30,7 +31,7 @@ public class GameRoot : MonoBehaviour
         
         // create the different managers
         ConfigManager = new ConfigManager();
-        StateManager = new StateManager();
+        StateManager = new StateManager(this, FindFirstObjectByType<ScreenCoordinator>());
         
 #if DEBUG_MENU_ENABLED
         debugMenu = gameObject.AddComponent<DebugMenu>();

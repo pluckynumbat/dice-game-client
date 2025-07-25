@@ -1,4 +1,5 @@
 using Network;
+using Presentation;
 using UnityEngine;
 
 /// <summary>
@@ -38,6 +39,31 @@ public class DebugMenu : MonoBehaviour
             _ = GameRoot.Instance.ConfigManager.RequestConfig();
         }
         
+        if (GUILayout.Button("Switch to the Loading Screen", GUILayout.MaxWidth(Screen.width)))
+        {
+            FindFirstObjectByType<ScreenCoordinator>().ChangeToScreen(ScreenCoordinator.ScreenType.Loading);
+        }
+        
+        if (GUILayout.Button("Switch to the Main Screen", GUILayout.MaxWidth(Screen.width)))
+        {
+            FindFirstObjectByType<ScreenCoordinator>().ChangeToScreen(ScreenCoordinator.ScreenType.Main);
+        }
+        
+        if (GUILayout.Button("Switch to the Stats Screen", GUILayout.MaxWidth(Screen.width)))
+        {
+            FindFirstObjectByType<ScreenCoordinator>().ChangeToScreen(ScreenCoordinator.ScreenType.Stats);
+        }
+        
+        if (GUILayout.Button("Switch to the Gameplay Screen", GUILayout.MaxWidth(Screen.width)))
+        {
+            FindFirstObjectByType<ScreenCoordinator>().ChangeToScreen(ScreenCoordinator.ScreenType.Gameplay);
+        }
+        
+        if (GUILayout.Button("Switch to the Results Screen", GUILayout.MaxWidth(Screen.width)))
+        {
+            FindFirstObjectByType<ScreenCoordinator>().ChangeToScreen(ScreenCoordinator.ScreenType.Result);
+        }
+
         if (GUILayout.Button("Close the debug menu",  GUILayout.MaxWidth(Screen.width)))
         {
             ToggleState();
