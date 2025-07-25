@@ -35,6 +35,9 @@ public class GameRoot : MonoBehaviour
 #if DEBUG_MENU_ENABLED
         debugMenu = gameObject.AddComponent<DebugMenu>();
 #endif
+        
+        // start the game in the auth state!
+        StateManager.ChangeGameState(StateManager.GameState.Auth);
     }
 
     private void Update()

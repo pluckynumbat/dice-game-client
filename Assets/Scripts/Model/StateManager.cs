@@ -7,7 +7,8 @@ namespace Model
     {
         public enum GameState
         {
-            Auth = 0,
+            None = 0,
+            Auth,
             MainMenu,
             LevelInProgress,
             LevelEnd,
