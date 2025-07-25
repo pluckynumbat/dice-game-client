@@ -21,15 +21,51 @@ namespace Presentation
             Result,
             Error
         }
-
+    
         public LoadingScreen LoadingScreen;
         public MainScreen MainScreen;
         public StatsScreen StatsScreen;
         public GameplayScreen GameplayScreen;
         public ResultsScreen ResultScreen;
-
+    
         // TODO: add error screen!
-
+    
         private ScreenType currentScreen;
+
+        public void ChangeToScreen(ScreenType newScreenType)
+        {
+            if (currentScreen == newScreenType)
+            {
+                return;
+            }
+
+            DisableAllScreens();
+
+            switch (newScreenType)
+            {
+                case ScreenType.Loading:
+                    LoadingScreen?.gameObject.SetActive(true);
+                    break;
+            
+                case ScreenType.Main:
+                    MainScreen?.UpdateDisplay();
+                    MainScreen?.gameObject.SetActive(true);
+                    break;
+            
+                case ScreenType.Stats:
+                    StatsScreen?.gameObject.SetActive(true);
+                    break;
+            
+                case ScreenType.Gameplay:
+                    GameplayScreen?.gameObject.SetActive(true);
+                    break;
+            
+                case ScreenType.Result:
+                    ResultScreen?.gameObject.SetActive(true);
+                    break;
+            }
+
+            currentScreen = newScreenType;
+        }
     }
 }
