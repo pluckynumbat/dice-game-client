@@ -14,6 +14,15 @@ namespace Model
         }
         
         public GameState CurrentState { get; private set; }
-        
+
+        public void ChangeGameState(GameState newState)
+        {
+            if (CurrentState == newState)
+            {
+                return;
+            }
+
+            CurrentState = newState;
+        }
     }
 }
