@@ -1,5 +1,6 @@
 #define DEBUG_MENU_ENABLED // comment this when not in debug mode anymore
 
+using Model;
 using UnityEngine;
 
 /// <summary>
@@ -8,6 +9,8 @@ using UnityEngine;
 public class GameRoot : MonoBehaviour
 {
     public static GameRoot Instance { get; private set; }
+
+    public ConfigManager ConfigManager { get; private set; }
     
     private DebugMenu debugMenu;
 
@@ -23,6 +26,8 @@ public class GameRoot : MonoBehaviour
             Instance = this;
         }
         DontDestroyOnLoad(this);
+
+        ConfigManager = new ConfigManager();
         
 #if DEBUG_MENU_ENABLED
         debugMenu = gameObject.AddComponent<DebugMenu>();
