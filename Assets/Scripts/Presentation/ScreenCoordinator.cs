@@ -67,5 +67,14 @@ namespace Presentation
 
             currentScreen = newScreenType;
         }
+
+        private void DisableAllScreens()
+        {
+            LoadingScreen?.gameObject.SetActive(false);
+            MainScreen?.gameObject.SetActive(false);
+            StatsScreen?.gameObject.SetActive(false);
+            GameplayScreen?.gameObject.SetActive(false);
+            ResultScreen?.gameObject.SetActive(false);
+        }
     }
 }
