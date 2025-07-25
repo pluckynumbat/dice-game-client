@@ -14,6 +14,8 @@ public class GameRoot : MonoBehaviour
     public ConfigManager ConfigManager { get; private set; }
     public StateManager StateManager { get; private set; }
     
+    public PlayerManager PlayerManager  { get; private set; }
+    
     private DebugMenu debugMenu;
 
     private void Awake()
@@ -31,11 +33,15 @@ public class GameRoot : MonoBehaviour
         
         // create the different managers
         ConfigManager = new ConfigManager();
-        StateManager = new StateManager(this, FindFirstObjectByType<ScreenCoordinator>());
+        StateManager = new StateManager(FindFirstObjectByType<ScreenCoordinator>());
+        PlayerManager = new PlayerManager();
         
 #if DEBUG_MENU_ENABLED
         debugMenu = gameObject.AddComponent<DebugMenu>();
 #endif
+        
+        // initialize the screen coordinator
+        StateManager.InitializeScreenCoordinator(this);
         
         // start the game in the auth state!
         StateManager.ChangeGameState(StateManager.GameState.Auth);
