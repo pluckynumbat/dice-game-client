@@ -11,6 +11,7 @@ public class GameRoot : MonoBehaviour
     public static GameRoot Instance { get; private set; }
 
     public ConfigManager ConfigManager { get; private set; }
+    public StateManager StateManager { get; private set; }
     
     private DebugMenu debugMenu;
 
@@ -26,12 +27,17 @@ public class GameRoot : MonoBehaviour
             Instance = this;
         }
         DontDestroyOnLoad(this);
-
+        
+        // create the different managers
         ConfigManager = new ConfigManager();
+        StateManager = new StateManager();
         
 #if DEBUG_MENU_ENABLED
         debugMenu = gameObject.AddComponent<DebugMenu>();
 #endif
+        
+        // start the game in the auth state!
+        StateManager.ChangeGameState(StateManager.GameState.Auth);
     }
 
     private void Update()
