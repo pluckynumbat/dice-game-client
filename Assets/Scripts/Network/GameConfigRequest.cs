@@ -16,7 +16,7 @@ namespace Network
 
         public async Task<GameConfig> Send(int timeout = 15)
         {
-            GameConfig gameConfig = null;
+            GameConfig gameConfig;
 
             string uri = $"{ServerHost}:{ServerPort}{Endpoint}";
 
@@ -38,6 +38,7 @@ namespace Network
 
                 default:
                     Debug.LogError($"failure, reason: {getRequest.error}");
+                    gameConfig = default(GameConfig);
                     break;
             }
         
@@ -46,13 +47,13 @@ namespace Network
     }
 
     [Serializable]
-    public class GameConfig
+    public struct GameConfig
     {
         public LevelConfig[] levels;
     }
 
     [Serializable]
-    public class LevelConfig
+    public struct LevelConfig
     {
         public int level;
         public int energyCost;

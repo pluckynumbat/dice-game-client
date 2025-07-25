@@ -39,6 +39,16 @@ public class DebugMenu : MonoBehaviour
             _ = GameRoot.Instance.ConfigManager.RequestConfig();
         }
         
+        if (GUILayout.Button("Send a New Player Request to the server",  GUILayout.MaxWidth(Screen.width)))
+        {
+            _ = GameRoot.Instance.PlayerManager.RequestNewPlayerCreation("test1234");
+        }
+        
+        if (GUILayout.Button("Send a Player Data to the server",  GUILayout.MaxWidth(Screen.width)))
+        {
+            _ = GameRoot.Instance.PlayerManager.RequestPlayerData("test1234");
+        }
+        
         if (GUILayout.Button("Switch to the Loading Screen", GUILayout.MaxWidth(Screen.width)))
         {
             FindFirstObjectByType<ScreenCoordinator>().ChangeToScreen(ScreenCoordinator.ScreenType.Loading);

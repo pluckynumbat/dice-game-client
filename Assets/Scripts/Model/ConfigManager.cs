@@ -14,13 +14,15 @@ namespace Model
         public async Task RequestConfig()
         {
             GameConfigRequest request = new GameConfigRequest();
+            GameConfig responseData = await request.Send(10);
 
-            GameConfig = await request.Send(10);
-
-            if (GameConfig == null)
+            if (responseData.levels == null)
             {
                 Debug.LogError("could not get the game config :(");
+                return;
             }
+
+            GameConfig = responseData;
         }
     }
 }

@@ -20,9 +20,14 @@ namespace Model
 
         private ScreenCoordinator screenCoordinator;
 
-        public StateManager(GameRoot root, ScreenCoordinator coordinator)
+        public StateManager(ScreenCoordinator coordinator)
         {
             screenCoordinator = coordinator;
+            screenCoordinator.InitializeScreens(root);
+        }
+
+        public void InitializeScreenCoordinator(GameRoot root)
+        {
             screenCoordinator.InitializeScreens(root);
         }
 
