@@ -1,3 +1,5 @@
+using Presentation;
+
 namespace Model
 {
     /// <summary>
@@ -15,6 +17,14 @@ namespace Model
         }
         
         public GameState CurrentState { get; private set; }
+
+        private ScreenCoordinator screenCoordinator;
+
+        public StateManager(GameRoot root, ScreenCoordinator coordinator)
+        {
+            screenCoordinator = coordinator;
+            screenCoordinator.InitializeScreens(root);
+        }
 
         public void ChangeGameState(GameState newState)
         {
