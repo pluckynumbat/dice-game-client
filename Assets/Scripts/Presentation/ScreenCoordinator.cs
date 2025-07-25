@@ -14,7 +14,8 @@ namespace Presentation
     {
         public enum ScreenType
         {
-            Loading = 0,
+            None = 0,
+            Loading,
             Main,
             Stats,
             Gameplay,
@@ -32,7 +33,7 @@ namespace Presentation
     
         private ScreenType currentScreen;
 
-        public void InitializeScreens(GameRoot gameRoot)
+        public void InitializeScreens(GameRoot root)
         {
            // TODO: this will inject dependencies of the screens into them
         }
