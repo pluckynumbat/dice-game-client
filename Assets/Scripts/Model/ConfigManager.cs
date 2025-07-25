@@ -10,5 +10,17 @@ namespace Model
     public class ConfigManager
     {
         public GameConfig GameConfig { get; private set; }
+        
+        public async Task RequestConfig()
+        {
+            GameConfigRequest request = new GameConfigRequest();
+
+            GameConfig = await request.Send(10);
+
+            if (GameConfig == null)
+            {
+                Debug.LogError("could not get the game config :(");
+            }
+        }
     }
 }
