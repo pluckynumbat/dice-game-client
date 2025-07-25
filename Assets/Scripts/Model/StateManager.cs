@@ -5,5 +5,15 @@ namespace Model
     /// </summary>
     public class StateManager
     {
+        public enum GameState
+        {
+            Auth = 0,
+            MainMenu,
+            LevelInProgress,
+            LevelEnd,
+        }
+        
+        public GameState CurrentState { get; private set; }
+        
     }
 }
