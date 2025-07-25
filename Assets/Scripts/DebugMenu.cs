@@ -30,6 +30,9 @@ public class DebugMenu : MonoBehaviour
     
     private void DisplayDebugMenu()
     {
+        GUILayout.Label("-----Debug Menu-----", GUILayout.MaxWidth(Screen.width), GUILayout.MinHeight(20));
+        GUILayout.Label($"Current Game State: {GameRoot.Instance.StateManager.CurrentState}");
+        
         if (GUILayout.Button("Send a Game Config Request to the server",  GUILayout.MaxWidth(Screen.width)))
         {
             _ = GameRoot.Instance.ConfigManager.RequestConfig();
