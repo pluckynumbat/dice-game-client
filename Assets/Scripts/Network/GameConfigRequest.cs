@@ -12,7 +12,7 @@ namespace Network
     {
         private const string ServerHost = "http://localhost";
         private const string ServerPort = "8080";
-        private const string Endpoint = "/config/v1/game-config";
+        private const string Endpoint = "/config/game-config";
 
         public async Task<GameConfig> Send(int timeout = 15)
         {

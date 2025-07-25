@@ -32,8 +32,7 @@ public class DebugMenu : MonoBehaviour
     {
         if (GUILayout.Button("Send a Game Config Request to the server",  GUILayout.MaxWidth(Screen.width)))
         {
-            GameConfigRequest request = new GameConfigRequest();
-            _ = request.Send();
+            _ = GameRoot.Instance.ConfigManager.RequestConfig();
         }
         
         if (GUILayout.Button("Close the debug menu",  GUILayout.MaxWidth(Screen.width)))
