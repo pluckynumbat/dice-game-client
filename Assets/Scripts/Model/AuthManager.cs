@@ -47,5 +47,13 @@ namespace Model
                 Debug.LogError("could not logout :(");
             }
         }
+        
+        // creates a base64 encoding of the string <username:password> and adds a prefix "Basic " to it
+        // reference: https://en.wikipedia.org/wiki/Basic_access_authentication
+        public string CreateBasicAuthHeaderPayload(string username, string password)
+        {
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes( username + ":" + password);
+            return "Basic " + Convert.ToBase64String(bytes);
+        }
     }
 }
