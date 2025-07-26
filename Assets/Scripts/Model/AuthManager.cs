@@ -48,6 +48,26 @@ namespace Model
             }
         }
         
+        private async Task<bool> FetchConfigTask()
+        {
+            await GameRoot.Instance.ConfigManager.RequestConfig();
+            return GameRoot.Instance.ConfigManager.GameConfig.levels != null;
+        }
+        
+        private async Task<bool> FetchPlayerDataTask(string playerID, bool isNewPlayer)
+        {
+            if (isNewPlayer)
+            {
+                await GameRoot.Instance.PlayerManager.RequestNewPlayerCreation(playerID);
+            }
+            else
+            {
+                await GameRoot.Instance.PlayerManager.RequestPlayerData(playerID);
+            }
+            
+            return !string.IsNullOrEmpty(GameRoot.Instance.PlayerManager.PlayerData.playerID);
+        }
+
         // creates a base64 encoding of the string <username:password> and adds a prefix "Basic " to it
         // reference: https://en.wikipedia.org/wiki/Basic_access_authentication
         public string CreateBasicAuthHeaderPayload(string username, string password)
