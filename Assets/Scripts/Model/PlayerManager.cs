@@ -14,7 +14,7 @@ namespace Model
         public async Task RequestNewPlayerCreation(string playerID)
         {
             NewPlayerRequest request = new NewPlayerRequest();
-            PlayerData responseData = await request.Send(playerID);
+            PlayerData responseData = await request.Send(GameRoot.Instance.AuthManager.SessionID, playerID);
 
             if (string.IsNullOrEmpty(responseData.playerID))
             {
@@ -28,7 +28,7 @@ namespace Model
         public async Task RequestPlayerData(string playerID)
         {
             PlayerDataRequest request = new PlayerDataRequest();
-            PlayerData responseData = await request.Send(playerID);
+            PlayerData responseData = await request.Send(GameRoot.Instance.AuthManager.SessionID, playerID);
 
             if (string.IsNullOrEmpty(responseData.playerID))
             {

@@ -14,7 +14,7 @@ namespace Model
         public async Task RequestConfig()
         {
             GameConfigRequest request = new GameConfigRequest();
-            GameConfig responseData = await request.Send(10);
+            GameConfig responseData = await request.Send(GameRoot.Instance.AuthManager.SessionID, 10);
 
             if (responseData.levels == null)
             {
