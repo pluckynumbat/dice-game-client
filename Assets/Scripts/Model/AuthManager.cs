@@ -48,6 +48,41 @@ namespace Model
             }
         }
         
+        private async Task<bool> BasicAuthenticationTask()
+        {
+            // 1. Check if we have a stored guid in player prefs
+            string existingGuid = PlayerPrefs.GetString("player-guid", null);
+            
+            // TODO: we should also check if the server was started after our guid was created because 
+            // in that case even if we have a stored guid, it won't be of any use to us as the server
+            // does not know about it... so we need to do new user login in that case
+            bool isNewUser = string.IsNullOrEmpty(existingGuid);
+
+            // 2. generate a new guid if we need to, or use the existing one
+            string authGuidToUse = isNewUser ? Guid.NewGuid().ToString() : existingGuid;
+            
+            // 3. create the 'basic authorization' header payload from our authGuidToUse (used as both username and password)
+            string authHeaderPayload = CreateBasicAuthHeaderPayload(authGuidToUse, authGuidToUse);
+               
+            // 4. send the login request and await the response
+            AuthLoginData loginData = await RequestLogin(authHeaderPayload, isNewUser);
+            if (string.IsNullOrEmpty(loginData.loginResponse.playerID))
+            {
+                // TODO: error handling
+                Debug.LogError("login request failed");
+                return false;
+            }
+            
+            // 5. save the new guid to the player prefs if it's a new user
+            if (isNewUser)
+            {
+                PlayerPrefs.SetString("player-guid", authGuidToUse);
+            }
+            
+            // 6. return success response!
+            return true;
+        }
+
         private async Task<bool> FetchConfigTask()
         {
             await GameRoot.Instance.ConfigManager.RequestConfig();
