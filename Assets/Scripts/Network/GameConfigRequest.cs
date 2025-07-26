@@ -14,7 +14,7 @@ namespace Network
         private const string ServerPort = "8080";
         private const string Endpoint = "/config/game-config";
 
-        public async Task<GameConfig> Send(int timeout = 15)
+        public async Task<GameConfig> Send(string sessionID, int timeout = 15)
         {
             GameConfig gameConfig;
 
@@ -23,7 +23,7 @@ namespace Network
             UnityWebRequest getRequest = UnityWebRequest.Get(uri);
             getRequest.timeout = timeout;
 
-            // TODO: add session id as a custom header here
+            getRequest.SetRequestHeader("Session-Id", sessionID);
             
             // TODO: add more error / exception handling in the following code?
 

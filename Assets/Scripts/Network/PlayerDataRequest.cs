@@ -13,7 +13,7 @@ namespace Network
         private const string ServerPort = "8080";
         private const string Endpoint = "/profile/player-data/";
     
-        public async Task<PlayerData> Send(string playerID, int timeout = 30)
+        public async Task<PlayerData> Send(string sessionID, string playerID, int timeout = 30)
         {
             PlayerData playerData;
         
@@ -22,7 +22,7 @@ namespace Network
             UnityWebRequest getRequest = UnityWebRequest.Get(uri);
             getRequest.timeout = timeout;
         
-            // TODO: add session id as a custom header here
+            getRequest.SetRequestHeader("Session-Id", sessionID);
 
             await getRequest.SendWebRequest();
         
