@@ -13,8 +13,8 @@ public class GameRoot : MonoBehaviour
 
     public ConfigManager ConfigManager { get; private set; }
     public StateManager StateManager { get; private set; }
-    
     public PlayerManager PlayerManager  { get; private set; }
+    public AuthManager AuthManager  { get; private set; }
     
     private DebugMenu debugMenu;
 
@@ -30,11 +30,15 @@ public class GameRoot : MonoBehaviour
             Instance = this;
         }
         DontDestroyOnLoad(this);
+
+        // find the screen coordinator script in the bootstrap scene
+        ScreenCoordinator screenCoordinator = FindFirstObjectByType<ScreenCoordinator>();
         
         // create the different managers
         ConfigManager = new ConfigManager();
-        StateManager = new StateManager(FindFirstObjectByType<ScreenCoordinator>());
+        StateManager = new StateManager(screenCoordinator);
         PlayerManager = new PlayerManager();
+        AuthManager = new AuthManager();
         
 #if DEBUG_MENU_ENABLED
         debugMenu = gameObject.AddComponent<DebugMenu>();
@@ -43,8 +47,8 @@ public class GameRoot : MonoBehaviour
         // initialize the screen coordinator
         StateManager.InitializeScreenCoordinator(this);
         
-        // start the game in the auth state!
-        StateManager.ChangeGameState(StateManager.GameState.Auth);
+        // start the game with the auth flow!
+        _ = AuthManager.PerformAuthFlow(screenCoordinator.LoadingScreen);
     }
 
     private void Update()
@@ -55,5 +59,10 @@ public class GameRoot : MonoBehaviour
             debugMenu?.ToggleState();
         }
 #endif
+    }
+
+    private void OnDestroy()
+    {
+        _ = AuthManager.RequestLogout();
     }
 }

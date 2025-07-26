@@ -5,23 +5,22 @@ using UnityEngine.Networking;
 namespace Network
 {
     /// <summary>
-    /// The network request to get the data of an existing player
+    ///  The network request to log the user out by deleting the current session
     /// </summary>
-    public class PlayerDataRequest
+    public class LogoutRequest
     {
         private const string ServerHost = "http://localhost";
         private const string ServerPort = "8080";
-        private const string Endpoint = "/profile/player-data/";
+        private const string Endpoint = "/auth/logout";
     
-        public async Task<PlayerData> Send(string sessionID, string playerID, int timeout = 30)
+        public async Task<bool> Send(string sessionID, int timeout = 5)
         {
-            PlayerData playerData;
-        
-            string uri = $"{ServerHost}:{ServerPort}{Endpoint}{playerID}";
-        
+            bool success;
+            
+            string uri = $"{ServerHost}:{ServerPort}{Endpoint}";
+            
             UnityWebRequest getRequest = UnityWebRequest.Get(uri);
             getRequest.timeout = timeout;
-        
             getRequest.SetRequestHeader("Session-Id", sessionID);
 
             await getRequest.SendWebRequest();
@@ -29,17 +28,16 @@ namespace Network
             switch (getRequest.result)
             {
                 case UnityWebRequest.Result.Success:
-                    Debug.Log($"success, player data response: {getRequest.downloadHandler.text}");
-                    playerData = JsonUtility.FromJson<PlayerData>(getRequest.downloadHandler.text);
+                    Debug.Log("success! you were logged out");
+                    success = true;
                     break;
 
                 default:
                     Debug.LogError($"failure, reason: {getRequest.error}");
-                    playerData = default(PlayerData);
+                    success = false;
                     break;
             }
-        
-            return playerData;
+            return success;
         }
     }
 }
