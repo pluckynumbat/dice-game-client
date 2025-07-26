@@ -11,6 +11,12 @@ public class DebugMenu : MonoBehaviour
 
     private Vector2 scrollPosition = Vector2.zero;
 
+    private string username1 = "username";
+    private string password1 = "password";
+    
+    private string username2 = "username";
+    private string password2 = "password";
+
     private void Awake()
     {
         enabled = false;
@@ -34,6 +40,36 @@ public class DebugMenu : MonoBehaviour
         GUILayout.Label("-----Debug Menu-----", GUILayout.MaxWidth(Screen.width), GUILayout.MinHeight(20));
         GUILayout.Label($"Current Game State: {GameRoot.Instance.StateManager.CurrentState}");
         
+        GUILayout.BeginHorizontal(GUILayout.MaxWidth(Screen.width));
+        
+        if (GUILayout.Button("Send a Login Request \n (as a new user) \n to the server",  GUILayout.MaxWidth(Screen.width * 0.5f),  GUILayout.MinHeight(50)))
+        {
+            string authHeaderPayload = GameRoot.Instance.AuthManager.CreateBasicAuthHeaderPayload(username1, password1);
+            _ = GameRoot.Instance.AuthManager.RequestLogin(authHeaderPayload, true);
+        }
+        
+        GUILayout.BeginVertical();
+        username1 = GUILayout.TextArea(username1);
+        password1 = (password1 == "password") ? GUILayout.TextArea(password1) : GUILayout.PasswordField(password1, '*');
+        GUILayout.EndVertical();
+        
+        GUILayout.EndHorizontal();
+        
+        GUILayout.BeginHorizontal(GUILayout.MaxWidth(Screen.width));
+        
+        if (GUILayout.Button("Send a Login Request \n (as an existing user) \n to the server",  GUILayout.MaxWidth(Screen.width * 0.5f),  GUILayout.MinHeight(50)))
+        {
+            string authHeaderPayload = GameRoot.Instance.AuthManager.CreateBasicAuthHeaderPayload(username2, password2);
+            _ = GameRoot.Instance.AuthManager.RequestLogin(authHeaderPayload, false);
+        }
+        
+        GUILayout.BeginVertical();
+        username2 = GUILayout.TextArea(username2);
+        password2 = (password2 == "password") ? GUILayout.TextArea(password2) : GUILayout.PasswordField(password2, '*');
+        GUILayout.EndVertical();
+        
+        GUILayout.EndHorizontal();
+        
         if (GUILayout.Button("Send a Game Config Request to the server",  GUILayout.MaxWidth(Screen.width)))
         {
             _ = GameRoot.Instance.ConfigManager.RequestConfig();
@@ -44,9 +80,14 @@ public class DebugMenu : MonoBehaviour
             _ = GameRoot.Instance.PlayerManager.RequestNewPlayerCreation("test1234");
         }
         
-        if (GUILayout.Button("Send a Player Data to the server",  GUILayout.MaxWidth(Screen.width)))
+        if (GUILayout.Button("Send a Player Data Request to the server",  GUILayout.MaxWidth(Screen.width)))
         {
             _ = GameRoot.Instance.PlayerManager.RequestPlayerData("test1234");
+        }
+        
+        if (GUILayout.Button("Send a Logout Request to the server",  GUILayout.MaxWidth(Screen.width)))
+        {
+            _ = GameRoot.Instance.AuthManager.RequestLogout();
         }
         
         if (GUILayout.Button("Switch to the Loading Screen", GUILayout.MaxWidth(Screen.width)))
