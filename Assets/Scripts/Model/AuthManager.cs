@@ -13,5 +13,39 @@ namespace Model
     {
         public string PlayerID;
         public string SessionID;
+        
+        public async Task<AuthLoginData> RequestLogin(string authHeaderPayload, bool isNewUser)
+        {
+            LoginRequest request = new LoginRequest();
+            AuthLoginData loginData = await request.Send(authHeaderPayload, isNewUser);
+
+            if (!string.IsNullOrEmpty(loginData.loginResponse.playerID))
+            {
+                PlayerID = loginData.loginResponse.playerID;
+                SessionID = loginData.sessionID;
+            }
+            else
+            {
+                Debug.LogError("could not login :(");
+            }
+
+            return loginData;
+        }
+        
+        public async Task RequestLogout()
+        {
+            LogoutRequest request = new LogoutRequest();
+            bool success = await request.Send(SessionID);
+
+            if (success)
+            {
+                PlayerID = null;
+                SessionID = null;
+            }
+            else
+            {
+                Debug.LogError("could not logout :(");
+            }
+        }
     }
 }
