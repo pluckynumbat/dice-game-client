@@ -37,7 +37,19 @@ namespace Model
                 return;
             }
 
+            GameState previousState = CurrentState;
             CurrentState = newState;
+
+            switch (newState)
+            {
+                case GameState.Auth:
+                    screenCoordinator.ChangeToScreen(ScreenCoordinator.ScreenType.Loading);
+                    break;
+                
+                case GameState.MainMenu:
+                    screenCoordinator.ChangeToScreen(ScreenCoordinator.ScreenType.Main);
+                    break;
+            }
         }
     }
 }
