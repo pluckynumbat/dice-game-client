@@ -48,6 +48,63 @@ namespace Model
             }
         }
         
+        // This will orchestrate the various steps involved in the auth flow, along with updating the loading screen bar
+        public async Task PerformAuthFlow(LoadingScreen loadingScreen)
+        {
+            // change the game state, getting the loading bar started
+            GameRoot.Instance.StateManager.ChangeGameState(StateManager.GameState.Auth);
+            if (loadingScreen != null)
+            {
+                await loadingScreen?.ShowProgress(.1f, 0.1f);
+            }
+
+            // core task: start basic authentication task and await on results
+            BasicAuthTaskResult basicAuthTaskResult = await BasicAuthenticationTask();
+            if (!basicAuthTaskResult.Success)
+            {
+                // TODO: error handling
+                Debug.LogError("Basic auth task failed");
+                return;
+            }
+
+            if (loadingScreen != null) // let the loading bar go to 50%
+            {
+                await loadingScreen.ShowProgress(.5f, 0.4f);
+            }
+
+            // on successful auth, fetch the config and player data concurrently
+            Task<bool> configTask = FetchConfigTask();
+            Task<bool> playerDataTask = FetchPlayerDataTask(PlayerID, basicAuthTaskResult.IsNewUser);
+            
+            if (loadingScreen != null)  // let the loading bar go to 75%
+            {
+                await loadingScreen.ShowProgress(.75f, 0.25f);
+            }
+
+            await Task.WhenAll(configTask, playerDataTask);
+            if (!configTask.Result)
+            {
+                // TODO: error handling
+                Debug.LogError("fetch config task failed");
+                return;
+            }
+            
+            if (!playerDataTask.Result)
+            {
+                // TODO: error handling
+                Debug.LogError("fetch player data task failed");
+                return;
+            }
+            
+            if (loadingScreen != null) // let the loading bar go to 100%
+            {
+                await loadingScreen.ShowProgress(1.0f, 0.25f);
+            }
+            
+            // finally, change the state to main menu
+            GameRoot.Instance.StateManager.ChangeGameState(StateManager.GameState.MainMenu);
+        }
+
         private async Task<BasicAuthTaskResult> BasicAuthenticationTask()
         {
             BasicAuthTaskResult result;
