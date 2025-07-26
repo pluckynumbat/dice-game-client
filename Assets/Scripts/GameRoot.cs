@@ -60,4 +60,9 @@ public class GameRoot : MonoBehaviour
         }
 #endif
     }
+
+    private void OnDestroy()
+    {
+        _ = AuthManager.RequestLogout();
+    }
 }
