@@ -34,8 +34,9 @@ namespace Presentation
         private ScreenType currentScreen;
 
         public void InitializeScreens(GameRoot root)
-        {
-           // TODO: this will inject dependencies of the screens into them
+        { 
+           // inject dependencies of the screens into them
+           MainScreen.Initialize(root.ConfigManager, root.PlayerManager);
         }
 
         public void ChangeToScreen(ScreenType newScreenType)

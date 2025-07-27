@@ -11,6 +11,15 @@ namespace Presentation.Main.Screen
         [SerializeField] private LevelSelectionPresenter levelSelectionPresenter;
         [SerializeField] private EnergyPresenter energyPresenter;
 
+        private ConfigManager myConfigManager;
+        private PlayerManager myPlayerManager;
+
+        public void Initialize(ConfigManager configManager, PlayerManager playerManager)
+        {
+            myConfigManager = configManager;
+            myPlayerManager = playerManager;
+        }
+
         private void OnEnable()
         {
             statsButton.onClick.AddListener(OnStatsButtonClicked);
