@@ -10,6 +10,7 @@ namespace Presentation.Main.Screen
         [SerializeField] private Button playButton;
         [SerializeField] private LevelSelectionPresenter levelSelectionPresenter;
         [SerializeField] private EnergyPresenter energyPresenter;
+        [SerializeField] private PlayerIdPresenter playerIdPresenter;
 
         private ConfigManager myConfigManager;
         private PlayerManager myPlayerManager;
