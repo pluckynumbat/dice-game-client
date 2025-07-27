@@ -14,10 +14,10 @@ namespace Presentation.Main.Presenters
 
         private int levelCount;
         
-        private void Awake()
+        public void Init(int totalLevels, int currentLevel)
         {
-            levelCount = 1;
-            CurrentLevelIndex = 0;
+            levelCount = totalLevels;
+            CurrentLevelIndex = currentLevel - 1;
             UpdateText();
         }
         

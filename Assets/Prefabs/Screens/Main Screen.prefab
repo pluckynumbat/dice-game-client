@@ -937,7 +937,8 @@ MonoBehaviour:
   statsButton: {fileID: 6333440280547278442}
   playButton: {fileID: 8523018877509478945}
   levelSelectionPresenter: {fileID: 8241610972539760628}
-  energyPresenter: {fileID: 0}
+  energyPresenter: {fileID: 977209124115238707}
+  playerIdPresenter: {fileID: 7813348140750654106}
 --- !u!1 &4356331566891394672
 GameObject:
   m_ObjectHideFlags: 0
@@ -1039,7 +1040,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30bcec99d6a14fe9b47a6ca01c7f5339, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  labelText: {fileID: 3879115071071266329}
+  labelText: {fileID: 4454173689613878130}
 --- !u!1 &5567183804242053751
 GameObject:
   m_ObjectHideFlags: 0

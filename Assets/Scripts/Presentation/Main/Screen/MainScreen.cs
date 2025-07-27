@@ -1,3 +1,6 @@
+using System.Threading;
+using System.Threading.Tasks;
+using Model;
 using Presentation.Main.Presenters;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,17 +13,51 @@ namespace Presentation.Main.Screen
         [SerializeField] private Button playButton;
         [SerializeField] private LevelSelectionPresenter levelSelectionPresenter;
         [SerializeField] private EnergyPresenter energyPresenter;
+        [SerializeField] private PlayerIdPresenter playerIdPresenter;
+
+        private ConfigManager myConfigManager;
+        private PlayerManager myPlayerManager;
+
+        // Properties for the energy display ticker
+        private CancellationTokenSource cancelTokenSource;
+        private int playerEnergyEstimate;
+        private int maxEnergy;
+        private int tickPeriodSeconds;
+        
+        public void Initialize(ConfigManager configManager, PlayerManager playerManager)
+        {
+            myConfigManager = configManager;
+            myPlayerManager = playerManager;
+
+            maxEnergy = PlayerManager.MaximumEnergy;
+            tickPeriodSeconds = PlayerManager.EnergyRegenerationSeconds;
+        }
 
         private void OnEnable()
         {
             statsButton.onClick.AddListener(OnStatsButtonClicked);
             playButton.onClick.AddListener(OnPlayButtonClicked);
+            
+            playerEnergyEstimate = myPlayerManager.PlayerData.energy;
+            UpdateDisplay();
+            
+            cancelTokenSource = new CancellationTokenSource();
+            _ = EnergyRegenerationTask(cancelTokenSource.Token);
         }
 
         private void OnDisable()
         {
+            cancelTokenSource.Cancel();
+                
             statsButton.onClick.RemoveAllListeners();
             playButton.onClick.RemoveAllListeners(); 
+        }
+
+        private void UpdateDisplay()
+        {
+            playerIdPresenter?.Init(myPlayerManager?.PlayerData.playerID ?? "xxxxxxxx");
+            levelSelectionPresenter?.Init(myConfigManager?.GameConfig.levels.Length ?? 1, myPlayerManager?.PlayerData.level ?? 1);
+            energyPresenter?.Init(playerEnergyEstimate);
         }
 
         private void OnStatsButtonClicked()
@@ -31,6 +68,21 @@ namespace Presentation.Main.Screen
         private void OnPlayButtonClicked()
         {
             // levelSelectionPresenter.CurrentLevelIndex
+        }
+        
+       // Ticker that updates the energy display
+       private async Task EnergyRegenerationTask(CancellationToken token)
+        {
+            while (!token.IsCancellationRequested)
+            {
+                await Task.Delay(tickPeriodSeconds * 1000, token);
+                if (playerEnergyEstimate < maxEnergy)
+                {
+                    playerEnergyEstimate++;
+                    energyPresenter.GainEnergy(1);
+                }
+            }
+            return;
         }
     }
 }
