@@ -42,5 +42,10 @@ namespace Model
             
             PlayerData = responseData;
         }
+
+        public void UpdatePlayerData(PlayerData newData)
+        {
+            PlayerData = newData;
+        }
     }
 }
