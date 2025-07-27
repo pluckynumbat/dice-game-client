@@ -1,4 +1,3 @@
-using Network;
 using Presentation;
 using UnityEngine;
 
@@ -83,6 +82,21 @@ public class DebugMenu : MonoBehaviour
         if (GUILayout.Button("Send a Player Data Request to the server",  GUILayout.MaxWidth(Screen.width)))
         {
             _ = GameRoot.Instance.PlayerManager.RequestPlayerData("test1234");
+        }
+        
+        if (GUILayout.Button("Send an Enter Level Request to the server",  GUILayout.MaxWidth(Screen.width)))
+        {
+            _ = GameRoot.Instance.GameplayManager.RequestLevelEntry(1);
+        }
+        
+        if (GUILayout.Button("Send an Level Result Request (WIN) to the server",  GUILayout.MaxWidth(Screen.width)))
+        {
+            _ = GameRoot.Instance.GameplayManager.RequestLevelResult(new []{1, 6});
+        }
+        
+        if (GUILayout.Button("Send an Level Result Request (LOSE) to the server",  GUILayout.MaxWidth(Screen.width)))
+        {
+            _ = GameRoot.Instance.GameplayManager.RequestLevelResult(new []{1, 1});
         }
         
         if (GUILayout.Button("Send a Logout Request to the server",  GUILayout.MaxWidth(Screen.width)))
