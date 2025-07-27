@@ -55,6 +55,7 @@ namespace Network
         public int[] rolls;
     }
 
+    // TODO: maybe get more data back in this, like a rewards struct with level unlocked etc...
     [Serializable]
     public struct LevelResultResponse
     {
