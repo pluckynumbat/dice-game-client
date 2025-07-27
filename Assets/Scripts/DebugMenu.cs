@@ -89,12 +89,12 @@ public class DebugMenu : MonoBehaviour
             _ = GameRoot.Instance.GameplayManager.RequestLevelEntry(1);
         }
         
-        if (GUILayout.Button("Send an Level Result Request (WIN) to the server",  GUILayout.MaxWidth(Screen.width)))
+        if (GUILayout.Button("Send a Level Result Request (roll 6) to the server",  GUILayout.MaxWidth(Screen.width)))
         {
             _ = GameRoot.Instance.GameplayManager.RequestLevelResult(new []{1, 6});
         }
         
-        if (GUILayout.Button("Send an Level Result Request (LOSE) to the server",  GUILayout.MaxWidth(Screen.width)))
+        if (GUILayout.Button("Send an Level Result Request (roll 1) to the server",  GUILayout.MaxWidth(Screen.width)))
         {
             _ = GameRoot.Instance.GameplayManager.RequestLevelResult(new []{1, 1});
         }
