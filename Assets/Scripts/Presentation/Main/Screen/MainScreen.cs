@@ -25,12 +25,21 @@ namespace Presentation.Main.Screen
         {
             statsButton.onClick.AddListener(OnStatsButtonClicked);
             playButton.onClick.AddListener(OnPlayButtonClicked);
+            
+            UpdateDisplay();
         }
 
         private void OnDisable()
         {
             statsButton.onClick.RemoveAllListeners();
             playButton.onClick.RemoveAllListeners(); 
+        }
+
+        private void UpdateDisplay()
+        {
+            playerIdPresenter?.Init(myPlayerManager?.PlayerData.playerID ?? "xxxxxxxx");
+            levelSelectionPresenter?.Init(myConfigManager?.GameConfig.levels.Length ?? 1, myPlayerManager?.PlayerData.level ?? 1);
+            energyPresenter?.Init(playerEnergyEstimate);
         }
 
         private void OnStatsButtonClicked()
