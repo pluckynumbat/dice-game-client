@@ -13,6 +13,38 @@ namespace Network
         private const string ServerHost = "http://localhost";
         private const string ServerPort = "8080";
         private const string Endpoint = "/gameplay/result";
+    
+        public async Task<LevelResultResponse> Send(string sessionID, string playerID, int level, int[] rolls, int timeout = 30)
+        {
+            LevelResultResponse response;
+        
+            string uri = $"{ServerHost}:{ServerPort}{Endpoint}";
+
+            LevelResultRequestBody requestBody = new LevelResultRequestBody() {playerID = playerID, level = level, rolls = rolls};
+            string postData = JsonUtility.ToJson(requestBody);
+        
+            UnityWebRequest postRequest = UnityWebRequest.Post(uri,postData, "application/json");
+            postRequest.timeout = timeout;
+        
+            postRequest.SetRequestHeader("Session-Id", sessionID);
+
+            await postRequest.SendWebRequest();
+        
+            switch (postRequest.result)
+            {
+                case UnityWebRequest.Result.Success:
+                    Debug.Log($"success, level result response: {postRequest.downloadHandler.text}");
+                    response = JsonUtility.FromJson<LevelResultResponse>(postRequest.downloadHandler.text);
+                    break;
+
+                default:
+                    Debug.LogError($"failure, reason: {postRequest.error}");
+                    response = default(LevelResultResponse);
+                    break;
+            }
+        
+            return response;
+        }
     }
     
     [Serializable]
