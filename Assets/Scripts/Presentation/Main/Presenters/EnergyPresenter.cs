@@ -9,6 +9,11 @@ namespace Presentation.Main.Presenters
 
         public int Energy { get; private set; }
         
+        public void Init(int startingEnergy)
+        {
+            Energy = startingEnergy;
+            UpdateText();
+        }
 
         public void GainEnergy(int value)
         {
