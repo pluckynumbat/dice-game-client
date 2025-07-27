@@ -37,5 +37,29 @@ namespace Model
 
             return accessGranted;
         }
+        
+        public async Task<bool> RequestLevelResult(int[] rolls)
+        {
+            LevelResultRequest request = new LevelResultRequest();
+            
+            LevelResultResponse responseData = await request.Send(GameRoot.Instance.AuthManager.SessionID, GameRoot.Instance.AuthManager.PlayerID, CurrentLevel, rolls);
+
+            if (string.IsNullOrEmpty(responseData.playerData.playerID))
+            {
+                Debug.LogError("level result request failed :(");
+                return false;
+            }
+
+            // request was successful (regardless of whether player won or not)
+            bool levelWon = responseData.levelWon;
+            GameRoot.Instance.PlayerManager.UpdatePlayerData(responseData.playerData);
+            WonLastPlayedLevel = levelWon;
+            
+            // reset current level and level config
+            CurrentLevel = 0;
+            CurrentLevelConfig = default(LevelConfig);
+            
+            return levelWon;
+        }
     }
 }
