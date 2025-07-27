@@ -9,6 +9,33 @@ namespace Model
     /// </summary>
     public class GameplayManager
     {
+        public int CurrentLevel;
+        public LevelConfig CurrentLevelConfig;
+        public bool WonLastPlayedLevel;
         
+        public async Task<bool> RequestLevelEntry(int level)
+        {
+            EnterLevelRequest request = new EnterLevelRequest();
+            
+            EnterLevelResponse responseData = await request.Send(
+                GameRoot.Instance.AuthManager.SessionID, GameRoot.Instance.AuthManager.PlayerID, level);
+
+            if (string.IsNullOrEmpty(responseData.playerData.playerID))
+            {
+                Debug.LogError("enter level request failed :(");
+                return false;
+            }
+
+            // request was successful (regardless of whether access was granted or not)
+            bool accessGranted = responseData.accessGranted;
+            GameRoot.Instance.PlayerManager.UpdatePlayerData(responseData.playerData);
+            if (accessGranted)
+            {
+                CurrentLevel = level;
+                CurrentLevelConfig = GameRoot.Instance.ConfigManager.GameConfig.levels[level - 1];
+            }
+
+            return accessGranted;
+        }
     }
 }
