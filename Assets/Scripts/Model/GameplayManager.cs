@@ -53,6 +53,7 @@ namespace Model
             // request was successful (regardless of whether player won or not)
             bool levelWon = responseData.levelWon;
             GameRoot.Instance.PlayerManager.UpdatePlayerData(responseData.playerData);
+            GameRoot.Instance.PlayerManager.UpdateStats(responseData.statsData);
             WonLastPlayedLevel = levelWon;
             
             // reset current level and level config

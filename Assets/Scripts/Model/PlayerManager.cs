@@ -14,6 +14,7 @@ namespace Model
         public const int EnergyRegenerationSeconds = 5;
         
         public PlayerData PlayerData;
+        public PlayerStats Stats;
         
         public async Task RequestNewPlayerCreation(string playerID)
         {
@@ -42,10 +43,29 @@ namespace Model
             
             PlayerData = responseData;
         }
+        
+        public async Task RequestPlayerStats(string playerID)
+        {
+            PlayerStatsRequest request = new PlayerStatsRequest();
+            PlayerStats responseData = await request.Send(GameRoot.Instance.AuthManager.SessionID, playerID);
+
+            if (responseData.levelStats == null)
+            {
+                Debug.Log("no player stats yet :(");
+                return;
+            }
+            
+            Stats = responseData;
+        }
 
         public void UpdatePlayerData(PlayerData newData)
         {
             PlayerData = newData;
+        }
+        
+        public void UpdateStats(PlayerStats newStats)
+        {
+            Stats = newStats;
         }
     }
 }

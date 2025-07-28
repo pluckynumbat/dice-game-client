@@ -78,7 +78,7 @@ namespace Model
             
             if (loadingScreen != null)  // let the loading bar go to 75%
             {
-                await loadingScreen.ShowProgress(.75f, 0.25f);
+                await loadingScreen.ShowProgress(.7f, 0.2f);
             }
 
             await Task.WhenAll(configTask, playerDataTask);
@@ -96,9 +96,16 @@ namespace Model
                 return;
             }
             
-            if (loadingScreen != null) // let the loading bar go to 100%
+            if (loadingScreen != null) // let the loading bar go to 90%
             {
-                await loadingScreen.ShowProgress(1.0f, 0.25f);
+                await loadingScreen.ShowProgress(.9f, 0.2f);
+            }
+            
+            // fetch the player stats
+            await FetchStatsTask(PlayerID);
+            if (loadingScreen != null) // let the loading bar go to 90%
+            {
+                await loadingScreen.ShowProgress(1.0f, 0.1f);
             }
             
             // finally, change the state to main menu
@@ -161,6 +168,11 @@ namespace Model
             }
             
             return !string.IsNullOrEmpty(GameRoot.Instance.PlayerManager.PlayerData.playerID);
+        }
+        
+        private async Task FetchStatsTask(string playerID)
+        {
+            await GameRoot.Instance.PlayerManager.RequestPlayerStats(playerID);
         }
 
         // creates a base64 encoding of the string <username:password> and adds a prefix "Basic " to it
