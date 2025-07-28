@@ -1,4 +1,5 @@
 using Model;
+using Presentation.Results.Presenters;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,7 @@ namespace Presentation.Results.Screen
     public class ResultsScreen : MonoBehaviour
     {
         [SerializeField] private Button continueButton;
+        [SerializeField] private ResultsPresenter resultsPresenter;
         
         private GameplayManager myGameplayManager;
         private StateManager myStateManager;
@@ -19,7 +21,11 @@ namespace Presentation.Results.Screen
         
         private void OnEnable()
         {
+            string resultsText = myGameplayManager.WonLastPlayedLevel ? "Level Won!" : "Level Lost";
+            resultsPresenter.Init(resultsText);
             continueButton.onClick.AddListener(OnContinueButtonClicked);
+            string resultsText = myGameplayManager.WonLastPlayedLevel ? "Level Won!" : "Level Lost";
+            resultsPresenter.Init(resultsText);
         }
 
         private void OnDisable()
