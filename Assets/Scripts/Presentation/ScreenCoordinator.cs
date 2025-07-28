@@ -50,6 +50,7 @@ namespace Presentation
             switch (newScreenType)
             {
                 case ScreenType.Loading:
+                    DisableAllScreens();
                     LoadingScreen?.gameObject.SetActive(true);
                     break;
             
