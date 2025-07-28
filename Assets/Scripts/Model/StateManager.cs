@@ -12,6 +12,7 @@ namespace Model
             None = 0,
             Auth,
             MainMenu,
+            ViewingStats,
             LevelInProgress,
             LevelEnd,
         }
@@ -48,6 +49,18 @@ namespace Model
                 
                 case GameState.MainMenu:
                     screenCoordinator.ChangeToScreen(ScreenCoordinator.ScreenType.Main);
+                    break;
+                
+                case GameState.ViewingStats:
+                    screenCoordinator.ChangeToScreen(ScreenCoordinator.ScreenType.Stats);
+                    break;
+                
+                case GameState.LevelInProgress:
+                    screenCoordinator.ChangeToScreen(ScreenCoordinator.ScreenType.Gameplay);
+                    break;
+                
+                case GameState.LevelEnd:
+                    screenCoordinator.ChangeToScreen(ScreenCoordinator.ScreenType.Result);
                     break;
             }
         }
