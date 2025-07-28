@@ -47,8 +47,6 @@ namespace Presentation
                 return;
             }
 
-            DisableAllScreens();
-
             switch (newScreenType)
             {
                 case ScreenType.Loading:
