@@ -21,8 +21,6 @@ namespace Presentation.Results.Screen
         
         private void OnEnable()
         {
-            string resultsText = myGameplayManager.WonLastPlayedLevel ? "Level Won!" : "Level Lost";
-            resultsPresenter.Init(resultsText);
             continueButton.onClick.AddListener(OnContinueButtonClicked);
             string resultsText = myGameplayManager.WonLastPlayedLevel ? "Level Won!" : "Level Lost";
             resultsPresenter.Init(resultsText);
@@ -35,7 +33,7 @@ namespace Presentation.Results.Screen
 
         private void OnContinueButtonClicked()
         {
-            
+            myStateManager.ChangeGameState(StateManager.GameState.MainMenu);
         }
     }
 }
