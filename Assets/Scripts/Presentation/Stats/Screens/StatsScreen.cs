@@ -7,6 +7,15 @@ namespace Presentation.Stats.Screens
     {
         [SerializeField] private Button closeButton;
         
+        private PlayerManager myPlayerManager;
+        private StateManager myStateManager;
+        
+        public void Initialize(PlayerManager playerManager, StateManager stateManager)
+        {
+            myPlayerManager = playerManager;
+            myStateManager = stateManager;
+        }
+        
         private void OnEnable()
         {
             closeButton.onClick.AddListener(OnCloseButtonClicked);
