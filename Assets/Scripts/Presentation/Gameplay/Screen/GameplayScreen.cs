@@ -1,4 +1,4 @@
-using System;
+using Model;
 using Presentation.Gameplay.Presenters;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,9 +13,18 @@ namespace Presentation.Gameplay.Screen
         [SerializeField] private TargetNumberPresenter targetNumberPresenter;
         [SerializeField] private DicePresenter dicePresenter;
 
+        private GameplayManager myGameplayManager;
+        private StateManager myStateManager;
+
         private void Awake()
         {
             Init(10, 6);
+        }
+        
+        public void Initialize(GameplayManager gameplayManager, StateManager stateManager)
+        {
+            myGameplayManager = gameplayManager;
+            myStateManager = stateManager;
         }
 
         private void OnEnable()
