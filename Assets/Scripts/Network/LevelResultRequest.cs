@@ -61,6 +61,6 @@ namespace Network
     {
         public bool levelWon;
         public PlayerData playerData;
-        // TODO: stats will come here
+        public PlayerStats statsData;
     }
 }
