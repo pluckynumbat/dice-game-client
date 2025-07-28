@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Model;
 using Presentation.Gameplay.Presenters;
 using UnityEngine;
@@ -16,10 +17,7 @@ namespace Presentation.Gameplay.Screen
         private GameplayManager myGameplayManager;
         private StateManager myStateManager;
 
-        private void Awake()
-        {
-            Init(10, 6);
-        }
+        private List<int> rolls; // to send to the server in the level result request
         
         public void Initialize(GameplayManager gameplayManager, StateManager stateManager)
         {
@@ -30,6 +28,10 @@ namespace Presentation.Gameplay.Screen
         private void OnEnable()
         {
             rollButton.onClick.AddListener(OnRollButtonClicked);
+            
+            rolls = new List<int>();
+            rollButton.interactable = true;
+            UpdateDisplay(myGameplayManager.CurrentLevelConfig.totalRolls, myGameplayManager.CurrentLevelConfig.target);
         }
 
         private void OnDisable()
@@ -37,7 +39,7 @@ namespace Presentation.Gameplay.Screen
             rollButton.onClick.RemoveAllListeners();
         }
 
-        public void Init(int maxRolls, int targetNumber)
+        private void UpdateDisplay(int maxRolls, int targetNumber)
         {
             rollCounterPresenter.Init(maxRolls);
             targetNumberPresenter.Init(targetNumber);
