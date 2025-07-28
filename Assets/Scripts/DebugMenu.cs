@@ -16,6 +16,8 @@ public class DebugMenu : MonoBehaviour
     private string username2 = "username";
     private string password2 = "password";
 
+    private string playerID1 = "player id";
+
     private void Awake()
     {
         enabled = false;
@@ -83,6 +85,14 @@ public class DebugMenu : MonoBehaviour
         {
             _ = GameRoot.Instance.PlayerManager.RequestPlayerData("test1234");
         }
+        
+        GUILayout.BeginHorizontal(GUILayout.MaxWidth(Screen.width));
+        if (GUILayout.Button("Send a Stats Request \n to the server",  GUILayout.MaxWidth(Screen.width * 0.5f), GUILayout.MinHeight(50)))
+        {
+            _ = GameRoot.Instance.PlayerManager.RequestPlayerStats(playerID1);
+        }
+        playerID1 = GUILayout.TextArea(playerID1);
+        GUILayout.EndHorizontal();
         
         if (GUILayout.Button("Send an Enter Level Request to the server",  GUILayout.MaxWidth(Screen.width)))
         {
