@@ -128,6 +128,11 @@ public class DebugMenu : MonoBehaviour
         {
             FindFirstObjectByType<ScreenCoordinator>().ChangeToScreen(ScreenCoordinator.ScreenType.Result);
         }
+        
+        if (GUILayout.Button("Clear all Player Prefs",  GUILayout.MaxWidth(Screen.width)))
+        {
+            PlayerPrefs.DeleteAll();
+        }
 
         if (GUILayout.Button("Close the debug menu",  GUILayout.MaxWidth(Screen.width)))
         {
