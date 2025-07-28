@@ -15,7 +15,7 @@ namespace Presentation.Stats.Views
             labelText.text = $"Level {levelIndex}";
             winCountText.text = $"{winCount}";
             loseCountText.text = $"{loseCount}";
-            bestScoreText.text = $"{bestScore}";
+            bestScoreText.text = winCount > 0 ? $"{bestScore}" : "--";
         }
     }
 }
