@@ -18,6 +18,31 @@ namespace Presentation.Stats.Presenters
 
         public void Init(PlayerLevelStats[] statsArray)
         {
+            if (cachedEntries == null)
+            {
+                cachedEntries = new List<StatEntryView>();
+            }
+
+            for (int index = 0; index < statsArray.Length; ++index)
+            {
+                PlayerLevelStats source = statsArray[index];
+                StatEntryView destination;
+                if (index < cachedEntries.Count) // re-use cached elements
+                {
+                    destination = cachedEntries[index];
+                }
+                else // not enough cached elements, create more
+                {
+                    destination = Instantiate(statsEntryViewPrefab, statsEntryContainerTransform)
+                        .GetComponent<StatEntryView>();
+                    cachedEntries.Add(destination);
+                }
+
+                if (destination != null)
+                {
+                    destination.Init(source.level, source.winCount, source.lossCount, source.bestScore);
+                }
+            }
         }
     }
 }
