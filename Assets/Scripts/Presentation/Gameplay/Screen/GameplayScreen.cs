@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Model;
 using Presentation.Gameplay.Presenters;
 using UnityEngine;
@@ -14,6 +15,8 @@ namespace Presentation.Gameplay.Screen
         [SerializeField] private TargetNumberPresenter targetNumberPresenter;
         [SerializeField] private DicePresenter dicePresenter;
 
+        [SerializeField] private int minimumLevelResultDelayMilliseconds;
+        
         private GameplayManager myGameplayManager;
         private StateManager myStateManager;
 
@@ -50,16 +53,27 @@ namespace Presentation.Gameplay.Screen
             rollCounterPresenter.ConsumeRoll();
             
             rollButton.interactable = false;
-            await dicePresenter.Roll(Random.Range(0, 6));
-            rollButton.interactable = true;
+            
+            int diceRollValue = Random.Range(1, 7);
+            rolls.Add(diceRollValue);
+            await dicePresenter.Roll(diceRollValue - 1);
 
-            if (dicePresenter.CurrentDiceNumber == targetNumberPresenter.TargetNumber)
+            bool win = (dicePresenter.CurrentDiceNumber == targetNumberPresenter.TargetNumber); // win condition!
+            bool lose = (!win) && (rollCounterPresenter.RemainingRolls <= 0); // lose condition :(
+
+            if (win || lose)
             {
-                Debug.Log("WIN");
+                Task<bool> levelResultTask = myGameplayManager.RequestLevelResult(rolls.ToArray());
+                Task minDelayTask = Task.Delay(minimumLevelResultDelayMilliseconds);  // added to let the player view the dice result before changing game state
+                
+                await Task.WhenAll(levelResultTask, minDelayTask);
+                
+                Debug.Log("level " + (levelResultTask.Result ? "won" : "lost"));
+                myStateManager.ChangeGameState(StateManager.GameState.LevelEnd);
             }
-            else if (rollCounterPresenter.RemainingRolls <= 0)
+            else
             {
-                Debug.Log("LOSE");
+                rollButton.interactable = true;
             }
         }
     }
