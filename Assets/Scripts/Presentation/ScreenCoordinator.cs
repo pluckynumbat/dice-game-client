@@ -36,7 +36,8 @@ namespace Presentation
         public void InitializeScreens(GameRoot root)
         { 
            // inject dependencies of the screens into them
-           MainScreen.Initialize(root.ConfigManager, root.PlayerManager);
+           MainScreen.Initialize(root.ConfigManager, root.PlayerManager, root.GameplayManager, root.StateManager);
+           StatsScreen.Initialize(root.PlayerManager, root.StateManager);
         }
 
         public void ChangeToScreen(ScreenType newScreenType)
@@ -46,16 +47,23 @@ namespace Presentation
                 return;
             }
 
-            DisableAllScreens();
-
             switch (newScreenType)
             {
                 case ScreenType.Loading:
+                    DisableAllScreens();
                     LoadingScreen?.gameObject.SetActive(true);
                     break;
             
                 case ScreenType.Main:
-                    MainScreen?.gameObject.SetActive(true);
+                    if (currentScreen == ScreenType.Stats)
+                    {
+                        StatsScreen?.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        DisableAllScreens();
+                        MainScreen?.gameObject.SetActive(true);
+                    }
                     break;
             
                 case ScreenType.Stats:

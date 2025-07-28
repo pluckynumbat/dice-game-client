@@ -17,6 +17,8 @@ namespace Presentation.Main.Screen
 
         private ConfigManager myConfigManager;
         private PlayerManager myPlayerManager;
+        private GameplayManager myGameplayManager;
+        private StateManager myStateManager;
 
         // Properties for the energy display ticker
         private CancellationTokenSource cancelTokenSource;
@@ -24,10 +26,12 @@ namespace Presentation.Main.Screen
         private int maxEnergy;
         private int tickPeriodSeconds;
         
-        public void Initialize(ConfigManager configManager, PlayerManager playerManager)
+        public void Initialize(ConfigManager configManager, PlayerManager playerManager, GameplayManager gameplayManager, StateManager stateManager)
         {
             myConfigManager = configManager;
             myPlayerManager = playerManager;
+            myGameplayManager = gameplayManager;
+            myStateManager = stateManager;
 
             maxEnergy = PlayerManager.MaximumEnergy;
             tickPeriodSeconds = PlayerManager.EnergyRegenerationSeconds;
@@ -62,7 +66,7 @@ namespace Presentation.Main.Screen
 
         private void OnStatsButtonClicked()
         {
-            
+            myStateManager.ChangeGameState(StateManager.GameState.ViewingStats);
         }
         
         private void OnPlayButtonClicked()
