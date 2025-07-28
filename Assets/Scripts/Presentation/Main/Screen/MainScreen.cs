@@ -43,6 +43,8 @@ namespace Presentation.Main.Screen
             statsButton.onClick.AddListener(OnStatsButtonClicked);
             playButton.onClick.AddListener(OnPlayButtonClicked);
             
+            playButton.interactable = true;
+            
             playerEnergyEstimate = myPlayerManager.PlayerData.energy;
             UpdateDisplay();
             
@@ -86,12 +88,17 @@ namespace Presentation.Main.Screen
                 return;
             }
 
+            playButton.interactable = false;
             bool canEnter = await myGameplayManager.RequestLevelEntry(levelToEnter);
             if (canEnter)
             {
                 playerEnergyEstimate = myPlayerManager.PlayerData.energy;
                 energyPresenter.ConsumeEnergy(levelConfig.energyCost);
                 myStateManager.ChangeGameState(StateManager.GameState.LevelInProgress);
+            }
+            else
+            {
+                playButton.interactable = true;
             }
         }
 
