@@ -55,7 +55,15 @@ namespace Presentation
                     break;
             
                 case ScreenType.Main:
-                    MainScreen?.gameObject.SetActive(true);
+                    if (currentScreen == ScreenType.Stats)
+                    {
+                        StatsScreen?.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        DisableAllScreens();
+                        MainScreen?.gameObject.SetActive(true);
+                    }
                     break;
             
                 case ScreenType.Stats:
