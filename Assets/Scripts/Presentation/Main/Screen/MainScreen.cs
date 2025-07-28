@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Model;
+using Network;
 using Presentation.Main.Presenters;
 using UnityEngine;
 using UnityEngine.UI;
@@ -42,6 +43,8 @@ namespace Presentation.Main.Screen
             statsButton.onClick.AddListener(OnStatsButtonClicked);
             playButton.onClick.AddListener(OnPlayButtonClicked);
             
+            playButton.interactable = true;
+            
             playerEnergyEstimate = myPlayerManager.PlayerData.energy;
             UpdateDisplay();
             
@@ -69,11 +72,36 @@ namespace Presentation.Main.Screen
             myStateManager.ChangeGameState(StateManager.GameState.ViewingStats);
         }
         
-        private void OnPlayButtonClicked()
+        private async void OnPlayButtonClicked()
         {
-            // levelSelectionPresenter.CurrentLevelIndex
+            int levelToEnter = levelSelectionPresenter.CurrentLevelIndex + 1;
+            if (myPlayerManager.PlayerData.level < levelToEnter)
+            {
+                Debug.Log("cannot enter, level has not been unlocked yet");
+                return;
+            }
+
+            LevelConfig levelConfig = myConfigManager.GameConfig.levels[levelToEnter - 1];
+            if (playerEnergyEstimate < levelConfig.energyCost)
+            {
+                Debug.Log("cannot enter, our current energy is too low");
+                return;
+            }
+
+            playButton.interactable = false;
+            bool canEnter = await myGameplayManager.RequestLevelEntry(levelToEnter);
+            if (canEnter)
+            {
+                playerEnergyEstimate = myPlayerManager.PlayerData.energy;
+                energyPresenter.ConsumeEnergy(levelConfig.energyCost);
+                myStateManager.ChangeGameState(StateManager.GameState.LevelInProgress);
+            }
+            else
+            {
+                playButton.interactable = true;
+            }
         }
-        
+
        // Ticker that updates the energy display
        private async Task EnergyRegenerationTask(CancellationToken token)
         {
