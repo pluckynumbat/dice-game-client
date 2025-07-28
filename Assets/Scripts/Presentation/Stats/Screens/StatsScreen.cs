@@ -28,7 +28,7 @@ namespace Presentation.Stats.Screens
 
         private void OnCloseButtonClicked()
         {
-            
+            myStateManager.ChangeGameState(StateManager.GameState.MainMenu);
         }
     }
 }
