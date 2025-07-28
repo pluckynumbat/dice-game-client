@@ -32,7 +32,7 @@ namespace Presentation.Stats.Screens
         
         private void UpdateDisplay()
         {
-            if (myPlayerManager?.Stats.levelStats != null)
+            if (myPlayerManager.Stats.levelStats != null)
             {
                 statsPresenter?.Init(myPlayerManager.Stats.levelStats);
             }
