@@ -1,4 +1,6 @@
-using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Model;
 using Presentation.Gameplay.Presenters;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,14 +15,26 @@ namespace Presentation.Gameplay.Screen
         [SerializeField] private TargetNumberPresenter targetNumberPresenter;
         [SerializeField] private DicePresenter dicePresenter;
 
-        private void Awake()
+        [SerializeField] private int minimumLevelResultDelayMilliseconds;
+        
+        private GameplayManager myGameplayManager;
+        private StateManager myStateManager;
+
+        private List<int> rolls; // to send to the server in the level result request
+        
+        public void Initialize(GameplayManager gameplayManager, StateManager stateManager)
         {
-            Init(10, 6);
+            myGameplayManager = gameplayManager;
+            myStateManager = stateManager;
         }
 
         private void OnEnable()
         {
             rollButton.onClick.AddListener(OnRollButtonClicked);
+            
+            rolls = new List<int>();
+            rollButton.interactable = true;
+            UpdateDisplay(myGameplayManager.CurrentLevelConfig.totalRolls, myGameplayManager.CurrentLevelConfig.target);
         }
 
         private void OnDisable()
@@ -28,7 +42,7 @@ namespace Presentation.Gameplay.Screen
             rollButton.onClick.RemoveAllListeners();
         }
 
-        public void Init(int maxRolls, int targetNumber)
+        private void UpdateDisplay(int maxRolls, int targetNumber)
         {
             rollCounterPresenter.Init(maxRolls);
             targetNumberPresenter.Init(targetNumber);
@@ -39,16 +53,27 @@ namespace Presentation.Gameplay.Screen
             rollCounterPresenter.ConsumeRoll();
             
             rollButton.interactable = false;
-            await dicePresenter.Roll(Random.Range(0, 6));
-            rollButton.interactable = true;
+            
+            int diceRollValue = Random.Range(1, 7);
+            rolls.Add(diceRollValue);
+            await dicePresenter.Roll(diceRollValue - 1);
 
-            if (dicePresenter.CurrentDiceNumber == targetNumberPresenter.TargetNumber)
+            bool win = (dicePresenter.CurrentDiceNumber == targetNumberPresenter.TargetNumber); // win condition!
+            bool lose = (!win) && (rollCounterPresenter.RemainingRolls <= 0); // lose condition :(
+
+            if (win || lose)
             {
-                Debug.Log("WIN");
+                Task<bool> levelResultTask = myGameplayManager.RequestLevelResult(rolls.ToArray());
+                Task minDelayTask = Task.Delay(minimumLevelResultDelayMilliseconds);  // added to let the player view the dice result before changing game state
+                
+                await Task.WhenAll(levelResultTask, minDelayTask);
+                
+                Debug.Log("level " + (levelResultTask.Result ? "won" : "lost"));
+                myStateManager.ChangeGameState(StateManager.GameState.LevelEnd);
             }
-            else if (rollCounterPresenter.RemainingRolls <= 0)
+            else
             {
-                Debug.Log("LOSE");
+                rollButton.interactable = true;
             }
         }
     }

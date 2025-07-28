@@ -38,6 +38,8 @@ namespace Presentation
            // inject dependencies of the screens into them
            MainScreen.Initialize(root.ConfigManager, root.PlayerManager, root.GameplayManager, root.StateManager);
            StatsScreen.Initialize(root.PlayerManager, root.StateManager);
+           GameplayScreen.Initialize(root.GameplayManager, root.StateManager);
+           ResultScreen.Initialize(root.GameplayManager, root.StateManager);
         }
 
         public void ChangeToScreen(ScreenType newScreenType)
@@ -71,6 +73,7 @@ namespace Presentation
                     break;
             
                 case ScreenType.Gameplay:
+                    DisableAllScreens();
                     GameplayScreen?.gameObject.SetActive(true);
                     break;
             

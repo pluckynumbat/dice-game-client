@@ -716,6 +716,7 @@ MonoBehaviour:
   rollCounterPresenter: {fileID: 288140169205688628}
   targetNumberPresenter: {fileID: 2133893346033588010}
   dicePresenter: {fileID: 2145685588626523222}
+  minimumLevelResultDelayMilliseconds: 500
 --- !u!1 &5621887812523763929
 GameObject:
   m_ObjectHideFlags: 0
