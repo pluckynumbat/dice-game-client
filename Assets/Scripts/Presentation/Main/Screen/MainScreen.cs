@@ -71,9 +71,21 @@ namespace Presentation.Main.Screen
         
         private void OnPlayButtonClicked()
         {
-            // levelSelectionPresenter.CurrentLevelIndex
+            int levelToEnter = levelSelectionPresenter.CurrentLevelIndex + 1;
+            if (myPlayerManager.PlayerData.level < levelToEnter)
+            {
+                Debug.Log("cannot enter, level has not been unlocked yet");
+                return;
+            }
+
+            LevelConfig levelConfig = myConfigManager.GameConfig.levels[levelToEnter - 1];
+            if (playerEnergyEstimate < levelConfig.energyCost)
+            {
+                Debug.Log("cannot enter, our current energy is too low");
+                return;
+            }
         }
-        
+
        // Ticker that updates the energy display
        private async Task EnergyRegenerationTask(CancellationToken token)
         {
