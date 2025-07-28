@@ -13,6 +13,35 @@ namespace Network
         private const string ServerHost = "http://localhost";
         private const string ServerPort = "8080";
         private const string Endpoint = "/stats/player-stats/";
+    
+        public async Task<PlayerStats> Send(string sessionID, string playerID, int timeout = 10)
+        {
+            PlayerStats stats;
+        
+            string uri = $"{ServerHost}:{ServerPort}{Endpoint}{playerID}";
+        
+            UnityWebRequest getRequest = UnityWebRequest.Get(uri);
+            getRequest.timeout = timeout;
+        
+            getRequest.SetRequestHeader("Session-Id", sessionID);
+
+            await getRequest.SendWebRequest();
+        
+            switch (getRequest.result)
+            {
+                case UnityWebRequest.Result.Success:
+                    Debug.Log($"success, player stats response: {getRequest.downloadHandler.text}");
+                    stats = JsonUtility.FromJson<PlayerStats>(getRequest.downloadHandler.text);
+                    break;
+
+                default:
+                    Debug.LogError($"failure, reason: {getRequest.error}");
+                    stats = default(PlayerStats);
+                    break;
+            }
+        
+            return stats;
+        }
     }
     
     [Serializable]
