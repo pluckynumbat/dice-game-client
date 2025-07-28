@@ -69,7 +69,7 @@ namespace Presentation.Main.Screen
             myStateManager.ChangeGameState(StateManager.GameState.ViewingStats);
         }
         
-        private void OnPlayButtonClicked()
+        private async void OnPlayButtonClicked()
         {
             int levelToEnter = levelSelectionPresenter.CurrentLevelIndex + 1;
             if (myPlayerManager.PlayerData.level < levelToEnter)
@@ -83,6 +83,14 @@ namespace Presentation.Main.Screen
             {
                 Debug.Log("cannot enter, our current energy is too low");
                 return;
+            }
+
+            bool canEnter = await myGameplayManager.RequestLevelEntry(levelToEnter);
+            if (canEnter)
+            {
+                playerEnergyEstimate = myPlayerManager.PlayerData.energy;
+                energyPresenter.ConsumeEnergy(levelConfig.energyCost);
+                myStateManager.ChangeGameState(StateManager.GameState.LevelInProgress);
             }
         }
 
