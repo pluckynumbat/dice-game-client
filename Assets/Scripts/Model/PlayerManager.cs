@@ -62,5 +62,10 @@ namespace Model
         {
             PlayerData = newData;
         }
+        
+        public void UpdateStats(PlayerStats newStats)
+        {
+            Stats = newStats;
+        }
     }
 }
