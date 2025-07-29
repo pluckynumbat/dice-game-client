@@ -14,10 +14,10 @@ namespace Model
         public string PlayerID;
         public string SessionID;
         
-        public async Task<AuthLoginData> RequestLogin(string authHeaderPayload, bool isNewUser)
+        public async Task<AuthLoginData> RequestLogin(string authHeaderPayload, bool isNewUser, string serverVersion)
         {
             LoginRequest request = new LoginRequest();
-            AuthLoginData loginData = await request.Send(authHeaderPayload, isNewUser);
+            AuthLoginData loginData = await request.Send(authHeaderPayload, isNewUser, serverVersion);
 
             if (!string.IsNullOrEmpty(loginData.loginResponse.playerID))
             {
