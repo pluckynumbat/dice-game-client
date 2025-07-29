@@ -63,7 +63,7 @@ namespace Presentation.Main.Screen
         private void UpdateDisplay()
         {
             playerIdPresenter?.Init(myPlayerManager?.PlayerData.playerID ?? "xxxxxxxx");
-            levelSelectionPresenter?.Init(myConfigManager?.GameConfig.levels.Length ?? 1, myPlayerManager?.PlayerData.level ?? 1);
+            levelSelectionPresenter?.Init(myPlayerManager?.PlayerData.level ?? 1, myPlayerManager?.PlayerData.level ?? 1);
             energyPresenter?.Init(playerEnergyEstimate);
         }
 
@@ -75,12 +75,6 @@ namespace Presentation.Main.Screen
         private async void OnPlayButtonClicked()
         {
             int levelToEnter = levelSelectionPresenter.CurrentLevelIndex + 1;
-            if (myPlayerManager.PlayerData.level < levelToEnter)
-            {
-                Debug.Log("cannot enter, level has not been unlocked yet");
-                return;
-            }
-
             LevelConfig levelConfig = myConfigManager.GameConfig.levels[levelToEnter - 1];
             if (playerEnergyEstimate < levelConfig.energyCost)
             {
