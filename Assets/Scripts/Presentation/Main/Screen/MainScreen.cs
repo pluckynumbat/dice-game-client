@@ -33,9 +33,6 @@ namespace Presentation.Main.Screen
             myPlayerManager = playerManager;
             myGameplayManager = gameplayManager;
             myStateManager = stateManager;
-
-            maxEnergy = configManager.GameConfig.maxEnergy;
-            tickPeriodSeconds = configManager.GameConfig.energyRegenSeconds;
         }
 
         private void OnEnable()
@@ -45,6 +42,8 @@ namespace Presentation.Main.Screen
             
             playButton.interactable = true;
             
+            maxEnergy = myConfigManager.GameConfig.maxEnergy;
+            tickPeriodSeconds = myConfigManager.GameConfig.energyRegenSeconds;
             playerEnergyEstimate = myPlayerManager.PlayerData.energy;
             UpdateDisplay();
             
