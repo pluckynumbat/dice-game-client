@@ -14,13 +14,17 @@ namespace Network
         private const string ServerPort = "8080";
         private const string Endpoint = "/auth/login";
     
-        public async Task<AuthLoginData> Send(string authString, bool isNewUser, int timeout = 10)
+        public async Task<AuthLoginData> Send(string authString, bool isNewUser, string serverVersion, int timeout = 10)
         {
             AuthLoginData authLoginData;
         
             string uri = $"{ServerHost}:{ServerPort}{Endpoint}";
             
-            LoginRequestBody requestBody = new LoginRequestBody() {isNewUser = isNewUser};
+            LoginRequestBody requestBody = new LoginRequestBody()
+            {
+                isNewUser = isNewUser,
+                serverVersion = serverVersion,
+            };
             string postData = JsonUtility.ToJson(requestBody);
             
             UnityWebRequest postRequest = UnityWebRequest.Post(uri,postData, "application/json");
@@ -53,6 +57,7 @@ namespace Network
     public struct LoginRequestBody
     {
         public bool isNewUser;
+        public string serverVersion;
     }
     
     [Serializable]
@@ -66,5 +71,6 @@ namespace Network
     public struct LoginResponse
     {
         public string playerID;
+        public string serverVersion;
     }
 }
