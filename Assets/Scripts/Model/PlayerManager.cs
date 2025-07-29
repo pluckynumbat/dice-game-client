@@ -9,10 +9,6 @@ namespace Model
     /// </summary>
     public class PlayerManager
     {
-        // TODO: should these constants come from the config instead?
-        public const int MaximumEnergy = 50;
-        public const int EnergyRegenerationSeconds = 5;
-        
         public PlayerData PlayerData;
         public PlayerStats Stats;
         

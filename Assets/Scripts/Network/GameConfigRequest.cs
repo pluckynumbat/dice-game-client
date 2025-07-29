@@ -50,6 +50,10 @@ namespace Network
     public struct GameConfig
     {
         public LevelConfig[] levels;
+        public int defaultLevel;
+        public int maxEnergy;
+        public int energyRegenSeconds;
+        public int defaultLevelScore;
     }
 
     [Serializable]
