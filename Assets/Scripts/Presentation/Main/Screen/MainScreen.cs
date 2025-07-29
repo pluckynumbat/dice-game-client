@@ -34,8 +34,8 @@ namespace Presentation.Main.Screen
             myGameplayManager = gameplayManager;
             myStateManager = stateManager;
 
-            maxEnergy = PlayerManager.MaximumEnergy;
-            tickPeriodSeconds = PlayerManager.EnergyRegenerationSeconds;
+            maxEnergy = configManager.GameConfig.maxEnergy;
+            tickPeriodSeconds = configManager.GameConfig.energyRegenSeconds;
         }
 
         private void OnEnable()
