@@ -46,7 +46,7 @@ public class DebugMenu : MonoBehaviour
         if (GUILayout.Button("Send a Login Request \n (as a new user) \n to the server",  GUILayout.MaxWidth(Screen.width * 0.5f),  GUILayout.MinHeight(50)))
         {
             string authHeaderPayload = GameRoot.Instance.AuthManager.CreateBasicAuthHeaderPayload(username1, password1);
-            _ = GameRoot.Instance.AuthManager.RequestLogin(authHeaderPayload, true);
+            _ = GameRoot.Instance.AuthManager.RequestLogin(authHeaderPayload, true, "0");
         }
         
         GUILayout.BeginVertical();
@@ -61,7 +61,7 @@ public class DebugMenu : MonoBehaviour
         if (GUILayout.Button("Send a Login Request \n (as an existing user) \n to the server",  GUILayout.MaxWidth(Screen.width * 0.5f),  GUILayout.MinHeight(50)))
         {
             string authHeaderPayload = GameRoot.Instance.AuthManager.CreateBasicAuthHeaderPayload(username2, password2);
-            _ = GameRoot.Instance.AuthManager.RequestLogin(authHeaderPayload, false);
+            _ = GameRoot.Instance.AuthManager.RequestLogin(authHeaderPayload, false, PlayerPrefs.GetString("server-version", null));
         }
         
         GUILayout.BeginVertical();
