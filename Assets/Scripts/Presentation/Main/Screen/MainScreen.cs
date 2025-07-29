@@ -63,7 +63,7 @@ namespace Presentation.Main.Screen
         private void UpdateDisplay()
         {
             playerIdPresenter?.Init(myPlayerManager?.PlayerData.playerID ?? "xxxxxxxx");
-            levelSelectionPresenter?.Init(myConfigManager?.GameConfig.levels.Length ?? 1, myPlayerManager?.PlayerData.level ?? 1);
+            levelSelectionPresenter?.Init(myPlayerManager?.PlayerData.level ?? 1, myPlayerManager?.PlayerData.level ?? 1);
             energyPresenter?.Init(playerEnergyEstimate);
         }
 
