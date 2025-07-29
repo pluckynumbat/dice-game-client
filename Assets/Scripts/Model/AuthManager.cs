@@ -114,31 +114,34 @@ namespace Model
 
         private async Task<BasicAuthTaskResult> BasicAuthenticationTask()
         {
-            BasicAuthTaskResult result;
-            
-            // 1. Check if we have a stored guid in player prefs
+            // 1. Check if we have a stored guid, server version in player prefs
             string existingGuid = PlayerPrefs.GetString("player-guid", null);
+            string serverVersion = PlayerPrefs.GetString("server-version", null);
             
-            // TODO: we should also check if the server was started after our guid was created because 
-            // in that case even if we have a stored guid, it won't be of any use to us as the server
-            // does not know about it... so we need to do new user login in that case
-            result.IsNewUser = string.IsNullOrEmpty(existingGuid);
-
+            // NOTE: isNewUser will just be a suggestion to the server. If the server was started 
+            // after our user was created (serverVersion mismatch), this user will still be treated 
+            // as a new user.
+            bool isNewUserRequest = string.IsNullOrEmpty(existingGuid);
+            string requestServerVersion = !string.IsNullOrEmpty(serverVersion) ? serverVersion : "0";
+            
             // 2. generate a new guid if we need to, or use the existing one
-            string authGuidToUse = result.IsNewUser ? Guid.NewGuid().ToString() : existingGuid;
+            string authGuidToUse = isNewUserRequest ? Guid.NewGuid().ToString() : existingGuid;
             
             // 3. create the 'basic authorization' header payload from our authGuidToUse (used as both username and password)
             string authHeaderPayload = CreateBasicAuthHeaderPayload(authGuidToUse, authGuidToUse);
                
             // 4. send the login request and await the response
-            AuthLoginData loginData = await RequestLogin(authHeaderPayload, result.IsNewUser);
+            AuthLoginData loginData = await RequestLogin(authHeaderPayload, isNewUserRequest, requestServerVersion);
+            
+            // 5. write values to the task result (and player prefs) based on the response
+            BasicAuthTaskResult result;
             result.Success = !string.IsNullOrEmpty(loginData.loginResponse.playerID);
+            result.ServerVersion = loginData.loginResponse.serverVersion;
+            result.IsNewUser = (result.ServerVersion != requestServerVersion) || isNewUserRequest;
             if (result.Success)
             {
-                if (result.IsNewUser)
-                {
-                    PlayerPrefs.SetString("player-guid", authGuidToUse);
-                }
+                PlayerPrefs.SetString("player-guid", authGuidToUse);
+                PlayerPrefs.SetString("server-version", loginData.loginResponse.serverVersion);
             }
             else
             {
@@ -188,5 +191,6 @@ namespace Model
     {
         public bool Success;
         public bool IsNewUser;
+        public string ServerVersion;
     }
 }
