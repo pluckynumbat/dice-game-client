@@ -15,6 +15,7 @@ namespace Model
             ViewingStats,
             LevelInProgress,
             LevelEnd,
+            Error,
         }
         
         public GameState CurrentState { get; private set; }
@@ -61,6 +62,10 @@ namespace Model
                 
                 case GameState.LevelEnd:
                     screenCoordinator.ChangeToScreen(ScreenCoordinator.ScreenType.Result);
+                    break;
+                
+                case GameState.Error:
+                    screenCoordinator.ChangeToScreen(ScreenCoordinator.ScreenType.Error);
                     break;
             }
         }
