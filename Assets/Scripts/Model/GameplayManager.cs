@@ -11,7 +11,7 @@ namespace Model
     {
         public int CurrentLevel;
         public LevelConfig CurrentLevelConfig;
-        public bool WonLastPlayedLevel;
+        public LevelResult LatestLevelResult;
         
         public async Task<bool> RequestLevelEntry(int level)
         {
@@ -38,7 +38,7 @@ namespace Model
             return accessGranted;
         }
         
-        public async Task<bool> RequestLevelResult(int[] rolls)
+        public async Task<LevelResult> RequestLevelResult(int[] rolls)
         {
             LevelResultRequest request = new LevelResultRequest();
             
@@ -47,20 +47,19 @@ namespace Model
             if (string.IsNullOrEmpty(responseData.playerData.playerID))
             {
                 Debug.LogError("level result request failed :(");
-                return false;
+                return default(LevelResult);
             }
 
             // request was successful (regardless of whether player won or not)
-            bool levelWon = responseData.levelWon;
+            LatestLevelResult = responseData.levelResult;
             GameRoot.Instance.PlayerManager.UpdatePlayerData(responseData.playerData);
             GameRoot.Instance.PlayerManager.UpdateStats(responseData.statsData);
-            WonLastPlayedLevel = levelWon;
             
             // reset current level and level config
             CurrentLevel = 0;
             CurrentLevelConfig = default(LevelConfig);
             
-            return levelWon;
+            return LatestLevelResult;
         }
     }
 }
