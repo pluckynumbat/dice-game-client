@@ -43,6 +43,10 @@ namespace Presentation.Error.Screen
                     continueButton.onClick.AddListener(DismissErrorScreen);
                     break;
                 
+                case ErrorSeverity.Reload:
+                    continueButton.onClick.AddListener(ReloadTheGame);
+                    break;
+                
                 case ErrorSeverity.Quit:
                     continueButton.onClick.AddListener(QuitTheApp);
                     break;
@@ -52,6 +56,12 @@ namespace Presentation.Error.Screen
         private void DismissErrorScreen()
         {
             myErrorManager.ExitErrorState();
+        }
+
+        private async void ReloadTheGame()
+        {
+            await myAuthManager.RequestLogout();
+            GameRoot.Instance.ReloadTheGame();
         }
 
         private async void QuitTheApp()
