@@ -41,7 +41,15 @@ namespace Model
         
         public void EnterErrorState(ErrorType errorType)
         {
+            previousGameState = GameRoot.Instance.StateManager.CurrentState;
             CurrentError = errors[errorType];
+            GameRoot.Instance.StateManager.ChangeGameState(StateManager.GameState.Error);
+        }
+        
+        public void ExitErrorState()
+        {
+            CurrentError = errors[ErrorType.None];
+            GameRoot.Instance.StateManager.ChangeGameState(previousGameState);
         }
     }
 
