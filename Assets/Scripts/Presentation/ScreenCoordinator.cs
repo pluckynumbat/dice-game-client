@@ -48,6 +48,11 @@ namespace Presentation
             {
                 return;
             }
+            
+            else if (currentScreen == ScreenType.Error)
+            {
+                ErrorScreen?.gameObject.SetActive(false);
+            }
 
             switch (newScreenType)
             {
@@ -60,10 +65,6 @@ namespace Presentation
                     if (currentScreen == ScreenType.Stats)
                     {
                         StatsScreen?.gameObject.SetActive(false);
-                    }
-                    else if (currentScreen == ScreenType.Error)
-                    {
-                        ErrorScreen?.gameObject.SetActive(false);
                     }
                     else
                     {
