@@ -77,6 +77,7 @@ namespace Presentation.Main.Screen
             LevelConfig levelConfig = myConfigManager.GameConfig.levels[levelToEnter - 1];
             if (playerEnergyEstimate < levelConfig.energyCost)
             {
+                myErrorManager.EnterErrorState(ErrorType.NotEnoughEnergy);
                 Debug.Log("cannot enter, our current energy is too low");
                 return;
             }
