@@ -32,15 +32,7 @@ namespace Presentation.Stats.Screens
         
         private void UpdateDisplay()
         {
-            if (myPlayerManager.Stats.levelStats != null)
-            {
-                statsPresenter?.Init(myPlayerManager.Stats.levelStats);
-            }
-            else
-            {
-                // TODO: display a "no stats yet" message?
-                Debug.Log("no stats to display yet");
-            }
+            statsPresenter?.Init(myPlayerManager.Stats.levelStats);
         }
 
         private void OnCloseButtonClicked()

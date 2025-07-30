@@ -14,9 +14,9 @@ namespace Network
         private const string ServerPort = "8080";
         private const string Endpoint = "/stats/player-stats/";
     
-        public async Task<PlayerStats> Send(string sessionID, string playerID, int timeout = 10)
+        public async Task<PlayerStatsResponse> Send(string sessionID, string playerID, int timeout = 10)
         {
-            PlayerStats stats;
+            PlayerStatsResponse response;
         
             string uri = $"{ServerHost}:{ServerPort}{Endpoint}{playerID}";
         
@@ -31,16 +31,16 @@ namespace Network
             {
                 case UnityWebRequest.Result.Success:
                     Debug.Log($"success, player stats response: {getRequest.downloadHandler.text}");
-                    stats = JsonUtility.FromJson<PlayerStats>(getRequest.downloadHandler.text);
+                    response = JsonUtility.FromJson<PlayerStatsResponse>(getRequest.downloadHandler.text);
                     break;
 
                 default:
                     Debug.LogError($"failure, reason: {getRequest.error}");
-                    stats = default(PlayerStats);
+                    response = default(PlayerStatsResponse);
                     break;
             }
         
-            return stats;
+            return response;
         }
     }
     
@@ -57,5 +57,12 @@ namespace Network
         public int winCount;
         public int lossCount;
         public int bestScore;
+    }
+    
+    [Serializable]
+    public struct PlayerStatsResponse
+    {
+        public string playerID;
+        public PlayerStats playerStats;
     }
 }
