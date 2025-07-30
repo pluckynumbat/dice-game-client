@@ -28,8 +28,7 @@ namespace Presentation
         public StatsScreen StatsScreen;
         public GameplayScreen GameplayScreen;
         public ResultsScreen ResultScreen;
-    
-        // TODO: add error screen!
+        public ErrorScreen ErrorScreen;
     
         private ScreenType currentScreen;
 
@@ -61,6 +60,10 @@ namespace Presentation
                     {
                         StatsScreen?.gameObject.SetActive(false);
                     }
+                    else if (currentScreen == ScreenType.Error)
+                    {
+                        ErrorScreen?.gameObject.SetActive(false);
+                    }
                     else
                     {
                         DisableAllScreens();
@@ -80,6 +83,10 @@ namespace Presentation
                 case ScreenType.Result:
                     ResultScreen?.gameObject.SetActive(true);
                     break;
+                
+                case ScreenType.Error:
+                    ErrorScreen?.gameObject.SetActive(true);
+                    break;
             }
 
             currentScreen = newScreenType;
@@ -92,6 +99,7 @@ namespace Presentation
             StatsScreen?.gameObject.SetActive(false);
             GameplayScreen?.gameObject.SetActive(false);
             ResultScreen?.gameObject.SetActive(false);
+            ErrorScreen?.gameObject.SetActive(false);
         }
     }
 }
