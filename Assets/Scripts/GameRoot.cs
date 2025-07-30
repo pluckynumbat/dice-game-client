@@ -16,6 +16,9 @@ public class GameRoot : MonoBehaviour
     public PlayerManager PlayerManager  { get; private set; }
     public AuthManager AuthManager  { get; private set; }
     public GameplayManager GameplayManager  { get; private set; }
+    public ErrorManager ErrorManager  { get; private set; }
+    
+    private ScreenCoordinator screenCoordinator;
     
     private DebugMenu debugMenu;
 
@@ -33,7 +36,7 @@ public class GameRoot : MonoBehaviour
         DontDestroyOnLoad(this);
 
         // find the screen coordinator script in the bootstrap scene
-        ScreenCoordinator screenCoordinator = FindFirstObjectByType<ScreenCoordinator>();
+        screenCoordinator = FindFirstObjectByType<ScreenCoordinator>();
         
         // create the different managers
         ConfigManager = new ConfigManager();
@@ -41,6 +44,7 @@ public class GameRoot : MonoBehaviour
         PlayerManager = new PlayerManager();
         AuthManager = new AuthManager();
         GameplayManager = new GameplayManager();
+        ErrorManager = new ErrorManager();
         
 #if DEBUG_MENU_ENABLED
         debugMenu = gameObject.AddComponent<DebugMenu>();
@@ -61,6 +65,12 @@ public class GameRoot : MonoBehaviour
             debugMenu?.ToggleState();
         }
 #endif
+    }
+
+    // Used to recover from some errors
+    public void ReloadTheGame()
+    {
+        _ = AuthManager.PerformAuthFlow(screenCoordinator.LoadingScreen);
     }
 
     private void OnDestroy()

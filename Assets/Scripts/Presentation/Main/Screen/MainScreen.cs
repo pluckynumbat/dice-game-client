@@ -20,6 +20,7 @@ namespace Presentation.Main.Screen
         private PlayerManager myPlayerManager;
         private GameplayManager myGameplayManager;
         private StateManager myStateManager;
+        private ErrorManager myErrorManager;
 
         // Properties for the energy display ticker
         private CancellationTokenSource cancelTokenSource;
@@ -27,12 +28,13 @@ namespace Presentation.Main.Screen
         private int maxEnergy;
         private int tickPeriodSeconds;
         
-        public void Initialize(ConfigManager configManager, PlayerManager playerManager, GameplayManager gameplayManager, StateManager stateManager)
+        public void Initialize(ConfigManager configManager, PlayerManager playerManager, GameplayManager gameplayManager, ErrorManager errorManager, StateManager stateManager)
         {
             myConfigManager = configManager;
             myPlayerManager = playerManager;
             myGameplayManager = gameplayManager;
             myStateManager = stateManager;
+            myErrorManager = errorManager;
         }
 
         private void OnEnable()
@@ -77,6 +79,7 @@ namespace Presentation.Main.Screen
             LevelConfig levelConfig = myConfigManager.GameConfig.levels[levelToEnter - 1];
             if (playerEnergyEstimate < levelConfig.energyCost)
             {
+                myErrorManager.EnterErrorState(ErrorType.NotEnoughEnergy);
                 Debug.Log("cannot enter, our current energy is too low");
                 return;
             }

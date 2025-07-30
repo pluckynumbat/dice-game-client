@@ -139,6 +139,11 @@ public class DebugMenu : MonoBehaviour
             FindFirstObjectByType<ScreenCoordinator>().ChangeToScreen(ScreenCoordinator.ScreenType.Result);
         }
         
+        if (GUILayout.Button("Switch to the Error Screen", GUILayout.MaxWidth(Screen.width)))
+        {
+            FindFirstObjectByType<ScreenCoordinator>().ChangeToScreen(ScreenCoordinator.ScreenType.Error);
+        }
+        
         if (GUILayout.Button("Clear all Player Prefs",  GUILayout.MaxWidth(Screen.width)))
         {
             PlayerPrefs.DeleteAll();
