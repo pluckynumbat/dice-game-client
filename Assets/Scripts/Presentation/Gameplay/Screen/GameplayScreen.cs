@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Model;
+using Network;
 using Presentation.Gameplay.Presenters;
 using UnityEngine;
 using UnityEngine.UI;
@@ -63,12 +64,12 @@ namespace Presentation.Gameplay.Screen
 
             if (win || lose)
             {
-                Task<bool> levelResultTask = myGameplayManager.RequestLevelResult(rolls.ToArray());
+                Task<LevelResult> levelResultTask = myGameplayManager.RequestLevelResult(rolls.ToArray());
                 Task minDelayTask = Task.Delay(minimumLevelResultDelayMilliseconds);  // added to let the player view the dice result before changing game state
                 
                 await Task.WhenAll(levelResultTask, minDelayTask);
                 
-                Debug.Log("level " + (levelResultTask.Result ? "won" : "lost"));
+                Debug.Log("level " + (levelResultTask.Result.won ? "won" : "lost"));
                 myStateManager.ChangeGameState(StateManager.GameState.LevelEnd);
             }
             else
