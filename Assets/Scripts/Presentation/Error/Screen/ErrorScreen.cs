@@ -23,5 +23,21 @@ namespace Presentation.Error.Screen
             myErrorManager = errorManager;
             myStateManager = stateManager;
         }
+        
+        private void OnEnable()
+        {
+            DisplayError(myErrorManager.CurrentError);
+        }
+
+        private void OnDisable()
+        {
+            continueButton.onClick.RemoveAllListeners();
+        }
+
+        private void DisplayError(ErrorStruct currentError)
+        {
+            errorPresenter.Init(currentError.ErrorTitle, currentError.ErrorMessage, currentError.ActionText);
+            Debug.Log($"Error: {currentError.ErrorTitle}: {currentError.ErrorMessage}");
+        }
     }
 }
