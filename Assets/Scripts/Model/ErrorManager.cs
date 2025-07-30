@@ -24,6 +24,7 @@ namespace Model
     public class ErrorManager
     {
         public ErrorStruct CurrentError { get; private set; }
+        public StateManager.GameState PreviousGameState { get; private set; }
 
         public void SetCurrentError(ErrorType errorType)
         {
