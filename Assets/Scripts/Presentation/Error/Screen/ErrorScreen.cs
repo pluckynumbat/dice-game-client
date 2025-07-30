@@ -12,5 +12,16 @@ namespace Presentation.Error.Screen
     {
         [SerializeField] private Button continueButton;
         [SerializeField] private ErrorPresenter errorPresenter;
+        
+        private AuthManager myAuthManager;
+        private ErrorManager myErrorManager;
+        private StateManager myStateManager;
+        
+        public void Initialize(AuthManager authManager, ErrorManager errorManager, StateManager stateManager)
+        {
+            myAuthManager = authManager;
+            myErrorManager = errorManager;
+            myStateManager = stateManager;
+        }
     }
 }
