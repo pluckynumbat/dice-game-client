@@ -24,9 +24,22 @@ namespace Model
     public class ErrorManager
     {
         public ErrorStruct CurrentError { get; private set; }
-        public StateManager.GameState PreviousGameState { get; private set; }
+        
+        private readonly Dictionary<ErrorType, ErrorStruct> errors;
+        private StateManager.GameState previousGameState;
 
-        public void SetCurrentError(ErrorType errorType)
+        public ErrorManager()
+        {
+            errors = new Dictionary<ErrorType, ErrorStruct>
+            {
+                [ErrorType.None] = new () { ErrorType = ErrorType.None, Severity = ErrorSeverity.Basic, ErrorTitle = "Test Title", ErrorMessage = "This is a test description of an error", ActionText = "OK"},
+                [ErrorType.NotEnoughEnergy] = new () { ErrorType = ErrorType.NotEnoughEnergy, Severity = ErrorSeverity.Basic, ErrorTitle = "Low Energy", ErrorMessage = "please try again later",  ActionText = "OK"},
+                [ErrorType.Unauthorized] = new () { ErrorType = ErrorType.Unauthorized, Severity = ErrorSeverity.Reload, ErrorTitle = "Unauthorized", ErrorMessage = "the session has expired, please reload", ActionText = "Reload"},
+                [ErrorType.ServerTimeout] = new () { ErrorType = ErrorType.ServerTimeout, Severity = ErrorSeverity.Quit, ErrorTitle = "Time Out", ErrorMessage = "the server did not respond,  please try again later", ActionText = "Quit"}
+            };
+        }
+        
+        public void EnterErrorState(ErrorType errorType)
         {
             CurrentError = errors[errorType];
         }
