@@ -1,4 +1,5 @@
 using Model;
+using Network;
 using Presentation.Results.Presenters;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,11 +11,13 @@ namespace Presentation.Results.Screen
         [SerializeField] private Button continueButton;
         [SerializeField] private ResultsPresenter resultsPresenter;
         
+        private PlayerManager myPlayerManager;
         private GameplayManager myGameplayManager;
         private StateManager myStateManager;
         
-        public void Initialize(GameplayManager gameplayManager, StateManager  stateManager)
+        public void Initialize(PlayerManager playerManager, GameplayManager gameplayManager, StateManager  stateManager)
         {
+            myPlayerManager = playerManager;
             myGameplayManager = gameplayManager;
             myStateManager = stateManager;
         }
@@ -22,8 +25,8 @@ namespace Presentation.Results.Screen
         private void OnEnable()
         {
             continueButton.onClick.AddListener(OnContinueButtonClicked);
-            string resultsText = myGameplayManager.WonLastPlayedLevel ? "Level Won!" : "Level Lost";
-            resultsPresenter.Init(resultsText);
+            LevelResult result = myGameplayManager.LatestLevelResult;
+            resultsPresenter.Init(result.won, result.energyReward, result.unlockedNewLevel, myPlayerManager.PlayerData.level);
         }
 
         private void OnDisable()
