@@ -59,8 +59,17 @@ namespace Network
     [Serializable]
     public struct LevelResultResponse
     {
-        public bool levelWon;
+        public LevelResult levelResult;
         public PlayerData playerData;
         public PlayerStats statsData;
     }
+    
+    [Serializable]
+    public struct LevelResult
+    {
+        public bool won;
+        public int energyReward;
+        public bool unlockedNewLevel;
+    }
+
 }
