@@ -2,6 +2,22 @@ using System.Collections.Generic;
 
 namespace Model
 {
+    public enum ErrorType
+    {
+        None = 0,
+        NotEnoughEnergy,
+        ServerTimeout,
+        Unauthorized,
+    }
+
+    public enum ErrorSeverity
+    {
+        None = 0,
+        Basic,
+        Reload,
+        Quit,
+    }
+    
     /// <summary>
     /// This manager is responsible for showing the error dialogs based on different error cases
     /// </summary>
