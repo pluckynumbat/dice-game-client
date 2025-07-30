@@ -39,7 +39,7 @@ namespace Presentation
            StatsScreen.Initialize(root.PlayerManager, root.StateManager);
            GameplayScreen.Initialize(root.GameplayManager, root.StateManager);
            ResultScreen.Initialize(root.PlayerManager, root.GameplayManager, root.StateManager);
-           ErrorScreen.Initialize(root.AuthManager, root.ErrorManager, root.StateManager);
+           ErrorScreen.Initialize(root.AuthManager, root.ErrorManager);
         }
 
         public void ChangeToScreen(ScreenType newScreenType)

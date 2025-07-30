@@ -15,13 +15,11 @@ namespace Presentation.Error.Screen
         
         private AuthManager myAuthManager;
         private ErrorManager myErrorManager;
-        private StateManager myStateManager;
         
-        public void Initialize(AuthManager authManager, ErrorManager errorManager, StateManager stateManager)
+        public void Initialize(AuthManager authManager, ErrorManager errorManager)
         {
             myAuthManager = authManager;
             myErrorManager = errorManager;
-            myStateManager = stateManager;
         }
         
         private void OnEnable()
@@ -38,6 +36,18 @@ namespace Presentation.Error.Screen
         {
             errorPresenter.Init(currentError.ErrorTitle, currentError.ErrorMessage, currentError.ActionText);
             Debug.Log($"Error: {currentError.ErrorTitle}: {currentError.ErrorMessage}");
+
+            switch (currentError.Severity)
+            {
+                case ErrorSeverity.Basic:
+                    continueButton.onClick.AddListener(DismissErrorScreen);
+                    break;
+            }
+        }
+
+        private void DismissErrorScreen()
+        {
+            myErrorManager.ExitErrorState();
         }
     }
 }
