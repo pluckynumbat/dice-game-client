@@ -50,6 +50,15 @@ namespace Presentation
                 return;
             }
 
+            // assumption is that a state that goes into the error should just go back to that state
+            // if we recover from the error and dismiss the error screen, except for the loading state
+            if (currentScreen == ScreenType.Error && newScreenType != ScreenType.Loading)
+            {
+                ErrorScreen?.gameObject.SetActive(false);
+                currentScreen = newScreenType;
+                return;
+            }
+
             switch (newScreenType)
             {
                 case ScreenType.Loading:
@@ -61,10 +70,6 @@ namespace Presentation
                     if (currentScreen == ScreenType.Stats)
                     {
                         StatsScreen?.gameObject.SetActive(false);
-                    } 
-                    else if (currentScreen == ScreenType.Error)
-                    {
-                        ErrorScreen?.gameObject.SetActive(false);
                     }
                     else
                     {
