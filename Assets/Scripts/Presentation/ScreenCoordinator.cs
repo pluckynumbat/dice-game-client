@@ -49,7 +49,7 @@ namespace Presentation
                 return;
             }
             
-            else if (currentScreen == ScreenType.Error)
+            if (currentScreen == ScreenType.Error)
             {
                 ErrorScreen?.gameObject.SetActive(false);
             }

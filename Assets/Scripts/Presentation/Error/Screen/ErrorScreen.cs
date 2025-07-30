@@ -42,12 +42,24 @@ namespace Presentation.Error.Screen
                 case ErrorSeverity.Basic:
                     continueButton.onClick.AddListener(DismissErrorScreen);
                     break;
+                
+                case ErrorSeverity.Quit:
+                    continueButton.onClick.AddListener(QuitTheApp);
+                    break;
             }
         }
 
         private void DismissErrorScreen()
         {
             myErrorManager.ExitErrorState();
+        }
+
+        private async void QuitTheApp()
+        {
+            await myAuthManager.RequestLogout();
+            
+            Debug.LogError("Quitting the app"); // added this since we cannot quit the app in the editor
+            Application.Quit();
         }
     }
 }
