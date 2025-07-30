@@ -43,15 +43,15 @@ namespace Model
         public async Task RequestPlayerStats(string playerID)
         {
             PlayerStatsRequest request = new PlayerStatsRequest();
-            PlayerStats responseData = await request.Send(GameRoot.Instance.AuthManager.SessionID, playerID);
+            PlayerStatsResponse response = await request.Send(GameRoot.Instance.AuthManager.SessionID, playerID);
 
-            if (responseData.levelStats == null)
+            if (string.IsNullOrEmpty(response.playerID))
             {
-                Debug.Log("no player stats yet :(");
+                Debug.Log("failed to get player stats :(");
                 return;
             }
             
-            Stats = responseData;
+            Stats = response.playerStats;
         }
 
         public void UpdatePlayerData(PlayerData newData)
