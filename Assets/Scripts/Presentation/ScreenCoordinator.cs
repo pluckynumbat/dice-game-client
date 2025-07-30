@@ -35,7 +35,7 @@ namespace Presentation
         public void InitializeScreens(GameRoot root)
         { 
            // inject dependencies of the screens into them
-           MainScreen.Initialize(root.ConfigManager, root.PlayerManager, root.GameplayManager, root.StateManager);
+           MainScreen.Initialize(root.ConfigManager, root.PlayerManager, root.GameplayManager, root.ErrorManager, root.StateManager);
            StatsScreen.Initialize(root.PlayerManager, root.StateManager);
            GameplayScreen.Initialize(root.GameplayManager, root.StateManager);
            ResultScreen.Initialize(root.PlayerManager, root.GameplayManager, root.StateManager);
