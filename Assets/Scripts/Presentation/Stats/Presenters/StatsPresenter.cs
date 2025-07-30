@@ -18,6 +18,8 @@ namespace Presentation.Stats.Presenters
 
         public void Init(PlayerLevelStats[] statsArray)
         {
+            // TODO: display a "no stats yet" message?
+            
             if (cachedEntries == null)
             {
                 cachedEntries = new List<StatEntryView>();
@@ -40,7 +42,17 @@ namespace Presentation.Stats.Presenters
 
                 if (destination != null)
                 {
+                    destination.gameObject.SetActive(true);
                     destination.Init(source.level, source.winCount, source.lossCount, source.bestScore);
+                }
+            }
+            
+            // disable extra cached entries
+            if (cachedEntries.Count > statsArray.Length)
+            {
+                for (int index = statsArray.Length; index < cachedEntries.Count; ++index)
+                {
+                    cachedEntries[index]?.gameObject.SetActive(false);
                 }
             }
         }
