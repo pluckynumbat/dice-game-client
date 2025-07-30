@@ -16,6 +16,7 @@ public class GameRoot : MonoBehaviour
     public PlayerManager PlayerManager  { get; private set; }
     public AuthManager AuthManager  { get; private set; }
     public GameplayManager GameplayManager  { get; private set; }
+    public ErrorManager ErrorManager  { get; private set; }
     
     private DebugMenu debugMenu;
 
@@ -41,6 +42,7 @@ public class GameRoot : MonoBehaviour
         PlayerManager = new PlayerManager();
         AuthManager = new AuthManager();
         GameplayManager = new GameplayManager();
+        ErrorManager = new ErrorManager();
         
 #if DEBUG_MENU_ENABLED
         debugMenu = gameObject.AddComponent<DebugMenu>();
