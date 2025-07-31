@@ -19,13 +19,13 @@ namespace Network
             
             string uri = $"{ServerHost}:{ServerPort}{Endpoint}";
             
-            UnityWebRequest getRequest = UnityWebRequest.Get(uri);
-            getRequest.timeout = timeout;
-            getRequest.SetRequestHeader("Session-Id", sessionID);
+            UnityWebRequest deleteRequest = UnityWebRequest.Delete(uri);
+            deleteRequest.timeout = timeout;
+            deleteRequest.SetRequestHeader("Session-Id", sessionID);
 
-            await getRequest.SendWebRequest();
+            await deleteRequest.SendWebRequest();
         
-            switch (getRequest.result)
+            switch (deleteRequest.result)
             {
                 case UnityWebRequest.Result.Success:
                     Debug.Log("success! you were logged out");
@@ -33,7 +33,7 @@ namespace Network
                     break;
 
                 default:
-                    Debug.LogError($"failure, reason: {getRequest.error}");
+                    Debug.LogError($"failure, reason: {deleteRequest.error}");
                     success = false;
                     break;
             }
