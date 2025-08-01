@@ -1,8 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Model;
-using UnityEngine;
-using UnityEngine.Networking;
 
 namespace Network
 {
