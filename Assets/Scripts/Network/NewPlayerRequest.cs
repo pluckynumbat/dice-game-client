@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Model;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -10,39 +11,13 @@ namespace Network
     /// </summary>
     public class NewPlayerRequest
     {
-        private const string ServerHost = "http://localhost";
-        private const string ServerPort = "8080";
         private const string Endpoint = "/profile/new-player";
     
-        public async Task<PlayerData> Send(string sessionID, string playerID, int timeout = 30)
+        public async Task<PlayerData> Send(string playerID, RequestParams extraParams)
         {
-            PlayerData playerData;
-        
-            string uri = $"{ServerHost}:{ServerPort}{Endpoint}";
-
-            NewPlayerRequestBody requestBody = new NewPlayerRequestBody() {playerID = playerID};
-            string postData = JsonUtility.ToJson(requestBody);
-        
-            UnityWebRequest postRequest = UnityWebRequest.Post(uri,postData, "application/json");
-            postRequest.timeout = timeout;
-        
-            postRequest.SetRequestHeader("Session-Id", sessionID);
-
-            await postRequest.SendWebRequest();
-        
-            switch (postRequest.result)
-            {
-                case UnityWebRequest.Result.Success:
-                    Debug.Log($"success, new player response: {postRequest.downloadHandler.text}");
-                    playerData = JsonUtility.FromJson<PlayerData>(postRequest.downloadHandler.text);
-                    break;
-
-                default:
-                    Debug.LogError($"failure, reason: {postRequest.error}");
-                    playerData = default(PlayerData);
-                    break;
-            }
-        
+            PlayerData playerData = await GameRoot.Instance.NetRequestManager.SendPostRequest
+                <PlayerData, NewPlayerRequestBody>(Endpoint, new NewPlayerRequestBody() {playerID = playerID}, extraParams);
+            
             return playerData;
         }
     }

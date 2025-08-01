@@ -15,7 +15,7 @@ namespace Model
         public async Task RequestNewPlayerCreation(string playerID)
         {
             NewPlayerRequest request = new NewPlayerRequest();
-            PlayerData responseData = await request.Send(GameRoot.Instance.AuthManager.SessionID, playerID);
+            PlayerData responseData = await request.Send(playerID, new RequestParams() {Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError});
 
             if (string.IsNullOrEmpty(responseData.playerID))
             {
