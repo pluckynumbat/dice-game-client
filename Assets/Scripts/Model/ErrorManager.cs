@@ -6,8 +6,10 @@ namespace Model
     {
         None = 0,
         NotEnoughEnergy,
+        CouldNotConnect,
         ServerTimeout,
         Unauthorized,
+        CriticalError,
     }
 
     public enum ErrorSeverity
@@ -35,7 +37,9 @@ namespace Model
                 [ErrorType.None] = new () { ErrorType = ErrorType.None, Severity = ErrorSeverity.Basic, ErrorTitle = "Test Title", ErrorMessage = "This is a test description of an error", ActionText = "OK"},
                 [ErrorType.NotEnoughEnergy] = new () { ErrorType = ErrorType.NotEnoughEnergy, Severity = ErrorSeverity.Basic, ErrorTitle = "Low Energy", ErrorMessage = "please try again later",  ActionText = "OK"},
                 [ErrorType.Unauthorized] = new () { ErrorType = ErrorType.Unauthorized, Severity = ErrorSeverity.Reload, ErrorTitle = "Unauthorized", ErrorMessage = "the session has expired, please reload", ActionText = "Reload"},
-                [ErrorType.ServerTimeout] = new () { ErrorType = ErrorType.ServerTimeout, Severity = ErrorSeverity.Quit, ErrorTitle = "Time Out", ErrorMessage = "the server did not respond,  please try again later", ActionText = "Quit"}
+                [ErrorType.CouldNotConnect] = new () { ErrorType = ErrorType.CouldNotConnect, Severity = ErrorSeverity.Basic, ErrorTitle = "Cannot Connect", ErrorMessage = "please check your connection, and try again later", ActionText = "Quit"},
+                [ErrorType.ServerTimeout] = new () { ErrorType = ErrorType.ServerTimeout, Severity = ErrorSeverity.Quit, ErrorTitle = "Time Out", ErrorMessage = "the server did not respond,  please try again later", ActionText = "Quit"},
+                [ErrorType.CriticalError] = new () { ErrorType = ErrorType.CriticalError, Severity = ErrorSeverity.Quit, ErrorTitle = "Critical Error", ErrorMessage = "please quit the app, and try again later", ActionText = "Quit"},
             };
         }
         
