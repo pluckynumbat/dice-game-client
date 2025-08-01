@@ -15,8 +15,8 @@ namespace Model
     /// </summary>
     public class NetRequestManager
     {
-        private const string ServerHost = "http://localhost";
-        private const string ServerPort = "8080";
+        public const string ServerHost = "http://localhost";
+        public const string ServerPort = "8080";
         private const int RetryDelayMilliseconds = 1000;
         
         // Public helper method to send a POST request

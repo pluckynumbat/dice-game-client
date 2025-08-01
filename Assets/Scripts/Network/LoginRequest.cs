@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Model;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -10,15 +11,13 @@ namespace Network
     /// </summary>
     public class LoginRequest
     {
-        private const string ServerHost = "http://localhost";
-        private const string ServerPort = "8080";
         private const string Endpoint = "/auth/login";
     
         public async Task<AuthLoginData> Send(string authString, bool isNewUser, string serverVersion, int timeout = 10)
         {
             AuthLoginData authLoginData;
         
-            string uri = $"{ServerHost}:{ServerPort}{Endpoint}";
+            string uri = $"{NetRequestManager.ServerHost}:{NetRequestManager.ServerPort}{Endpoint}";
             
             LoginRequestBody requestBody = new LoginRequestBody()
             {

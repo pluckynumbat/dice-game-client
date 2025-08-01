@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Model;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -9,15 +10,13 @@ namespace Network
     /// </summary>
     public class LogoutRequest
     {
-        private const string ServerHost = "http://localhost";
-        private const string ServerPort = "8080";
         private const string Endpoint = "/auth/logout";
     
         public async Task<bool> Send(string sessionID, int timeout = 5)
         {
             bool success;
             
-            string uri = $"{ServerHost}:{ServerPort}{Endpoint}";
+            string uri = $"{NetRequestManager.ServerHost}:{NetRequestManager.ServerPort}{Endpoint}";
             
             UnityWebRequest deleteRequest = UnityWebRequest.Delete(uri);
             deleteRequest.timeout = timeout;
