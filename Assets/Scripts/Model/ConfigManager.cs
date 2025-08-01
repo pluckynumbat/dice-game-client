@@ -14,7 +14,7 @@ namespace Model
         public async Task RequestConfig()
         {
             GameConfigRequest request = new GameConfigRequest();
-            GameConfig responseData = await request.Send(new RequestParams() {Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CouldNotConnect});
+            GameConfig responseData = await request.Send(new RequestParams() {Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError});
             
             if (responseData.levels == null)
             {

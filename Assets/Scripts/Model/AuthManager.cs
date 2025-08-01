@@ -85,19 +85,6 @@ namespace Model
             }
 
             await Task.WhenAll(configTask, playerDataTask);
-            if (!configTask.Result)
-            {
-                // TODO: error handling
-                Debug.LogError("fetch config task failed");
-                return;
-            }
-            
-            if (!playerDataTask.Result)
-            {
-                // TODO: error handling
-                Debug.LogError("fetch player data task failed");
-                return;
-            }
             
             if (loadingScreen != null) // let the loading bar go to 90%
             {
