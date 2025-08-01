@@ -17,9 +17,9 @@ namespace Model
         {
             EnterLevelRequest request = new EnterLevelRequest();
             
-            EnterLevelResponse responseData = await request.Send(
-                GameRoot.Instance.AuthManager.SessionID, GameRoot.Instance.AuthManager.PlayerID, level);
-
+            EnterLevelResponse responseData = await request.Send(GameRoot.Instance.AuthManager.PlayerID, level, 
+                new RequestParams() {Timeout = 10, Retries = 2, ErrorOnFail = ErrorType.CouldNotConnect});
+            
             if (string.IsNullOrEmpty(responseData.playerData.playerID))
             {
                 Debug.LogError("enter level request failed :(");
