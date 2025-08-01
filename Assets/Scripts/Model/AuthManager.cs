@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Network;
 using Presentation.Loading.Screen;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Model
 {
@@ -11,6 +12,8 @@ namespace Model
     /// </summary>
     public class AuthManager
     {
+        private const int AuthRetryCount = 4;
+        
         public string PlayerID;
         public string SessionID;
         
@@ -62,7 +65,7 @@ namespace Model
             BasicAuthTaskResult basicAuthTaskResult = await BasicAuthenticationTask();
             if (!basicAuthTaskResult.Success)
             {
-                // TODO: error handling
+                GameRoot.Instance.ErrorManager.EnterErrorState(ErrorType.CriticalError);
                 Debug.LogError("Basic auth task failed");
                 return;
             }
@@ -131,7 +134,20 @@ namespace Model
             string authHeaderPayload = CreateBasicAuthHeaderPayload(authGuidToUse, authGuidToUse);
                
             // 4. send the login request and await the response
-            AuthLoginData loginData = await RequestLogin(authHeaderPayload, isNewUserRequest, requestServerVersion);
+            // retry a few times if it is a connection error (could not connect / server timeout) before marking failure
+            AuthLoginData loginData = new AuthLoginData(){ loginResponse = new LoginResponse(), loginResult = UnityWebRequest.Result.InProgress, sessionID = null};
+            int attemptCount = AuthRetryCount + 1;
+            while (attemptCount > 0)
+            {
+                loginData = await RequestLogin(authHeaderPayload, isNewUserRequest, requestServerVersion);
+                if (!string.IsNullOrEmpty(loginData.loginResponse.playerID) || loginData.loginResult != UnityWebRequest.Result.ConnectionError)
+                {
+                    break;
+                }
+                Debug.LogWarning("auth login request could not connect to the server, retrying");
+                --attemptCount;
+                await Task.Delay(NetRequestManager.RetryDelayMilliseconds);
+            }
             
             // 5. write values to the task result (and player prefs) based on the response
             BasicAuthTaskResult result;
@@ -142,11 +158,6 @@ namespace Model
             {
                 PlayerPrefs.SetString("player-guid", authGuidToUse);
                 PlayerPrefs.SetString("server-version", loginData.loginResponse.serverVersion);
-            }
-            else
-            {
-                // TODO: error handling
-                Debug.LogError("login request failed");
             }
             
             // 5. return the result!
