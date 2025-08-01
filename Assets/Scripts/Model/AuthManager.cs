@@ -37,6 +37,11 @@ namespace Model
         
         public async Task RequestLogout()
         {
+            if (SessionID == null)
+            {
+                Debug.LogError("cannot logout, the session ID is null");
+            }
+
             LogoutRequest request = new LogoutRequest();
             bool success = await request.Send(SessionID);
 

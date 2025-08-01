@@ -64,10 +64,8 @@ namespace Presentation.Error.Screen
             GameRoot.Instance.ReloadTheGame();
         }
 
-        private async void QuitTheApp()
+        private void QuitTheApp()
         {
-            await myAuthManager.RequestLogout();
-            
             Debug.LogError("Quitting the app"); // added this since we cannot quit the app in the editor
             Application.Quit();
         }
