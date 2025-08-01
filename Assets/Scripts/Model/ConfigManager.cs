@@ -14,8 +14,8 @@ namespace Model
         public async Task RequestConfig()
         {
             GameConfigRequest request = new GameConfigRequest();
-            GameConfig responseData = await request.Send(GameRoot.Instance.AuthManager.SessionID, 10);
-
+            GameConfig responseData = await request.Send(new RequestParams() {Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CouldNotConnect});
+            
             if (responseData.levels == null)
             {
                 Debug.LogError("could not get the game config :(");
