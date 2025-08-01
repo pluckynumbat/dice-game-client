@@ -107,10 +107,10 @@ namespace Model
                     break;
             }
             
-            // this will prompt the error state with a 'Quit' button, should only be used in fatal error cases 
-            if (markFailure && extraParams.QuitOnFail)
+            // this will prompt the error state if the extra params have specified it
+            if (markFailure && extraParams.ErrorOnFail != ErrorType.None)
             {
-                GameRoot.Instance.ErrorManager.EnterErrorState(ErrorType.CriticalError);
+                GameRoot.Instance.ErrorManager.EnterErrorState(extraParams.ErrorOnFail);
             }
             return response;
         }
@@ -121,6 +121,6 @@ namespace Model
     {
         public int Timeout;
         public int Retries;
-        public bool QuitOnFail;
+        public ErrorType ErrorOnFail;
     }
 }
