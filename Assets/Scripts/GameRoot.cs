@@ -18,6 +18,8 @@ public class GameRoot : MonoBehaviour
     public GameplayManager GameplayManager  { get; private set; }
     public ErrorManager ErrorManager  { get; private set; }
     
+    public NetRequestManager NetRequestManager { get; private set; }
+
     private ScreenCoordinator screenCoordinator;
     
     private DebugMenu debugMenu;
@@ -45,6 +47,7 @@ public class GameRoot : MonoBehaviour
         AuthManager = new AuthManager();
         GameplayManager = new GameplayManager();
         ErrorManager = new ErrorManager();
+        NetRequestManager = new NetRequestManager();
         
 #if DEBUG_MENU_ENABLED
         debugMenu = gameObject.AddComponent<DebugMenu>();
