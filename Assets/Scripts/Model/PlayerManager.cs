@@ -43,7 +43,7 @@ namespace Model
         public async Task RequestPlayerStats(string playerID)
         {
             PlayerStatsRequest request = new PlayerStatsRequest();
-            PlayerStatsResponse response = await request.Send(GameRoot.Instance.AuthManager.SessionID, playerID);
+            PlayerStatsResponse response = await request.Send(playerID, new RequestParams() {Timeout = 5, Retries = 0});
 
             if (string.IsNullOrEmpty(response.playerID))
             {
