@@ -29,7 +29,7 @@ namespace Model
         public async Task RequestPlayerData(string playerID)
         {
             PlayerDataRequest request = new PlayerDataRequest();
-            PlayerData responseData = await request.Send(playerID, new RequestParams() {Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CouldNotConnect});
+            PlayerData responseData = await request.Send(playerID, new RequestParams() {Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError});
 
             if (string.IsNullOrEmpty(responseData.playerID))
             {

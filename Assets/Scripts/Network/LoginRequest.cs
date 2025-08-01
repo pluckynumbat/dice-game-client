@@ -47,7 +47,8 @@ namespace Network
                     authLoginData = default(AuthLoginData);
                     break;
             }
-        
+
+            authLoginData.loginResult = postRequest.result;
             return authLoginData;
         }
     }
@@ -64,6 +65,7 @@ namespace Network
     {
         public LoginResponse loginResponse;
         public string sessionID;
+        public UnityWebRequest.Result loginResult;
     }
     
     [Serializable]

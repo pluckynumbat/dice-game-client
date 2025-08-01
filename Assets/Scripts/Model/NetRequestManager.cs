@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -17,7 +18,7 @@ namespace Model
     {
         public const string ServerHost = "http://localhost";
         public const string ServerPort = "8080";
-        private const int RetryDelayMilliseconds = 1000;
+        public const int RetryDelayMilliseconds = 1000;
         
         // Public helper method to send a POST request
         public async Task<TRes> SendPostRequest<TRes,TReq>(string endpoint, TReq requestBody, RequestParams extraParams) where TRes : struct where TReq : struct
@@ -43,74 +44,88 @@ namespace Model
             UnityWebRequest sentRequest = new UnityWebRequest();
             UnityWebRequestAsyncOperation webRequestOp = new UnityWebRequestAsyncOperation();
             int attemptCount = extraParams.Retries + 1;
-            
-            // 1. Send the request to the server (with possible retries)
-            while (attemptCount > 0)
+
+            try
             {
-                UnityWebRequest reqToSend = requestType == RequestType.Get ? UnityWebRequest.Get(uri)
-                    : UnityWebRequest.Post(uri, requestBody, "application/json");
-                
-                reqToSend.timeout = extraParams.Timeout;
-                reqToSend.SetRequestHeader("Session-Id", GameRoot.Instance.AuthManager.SessionID);
-                
-                webRequestOp = reqToSend.SendWebRequest();
-                await webRequestOp;
-                
-                // check if successful / has a protocol failure, if so, move one
-                if (webRequestOp.webRequest.result != UnityWebRequest.Result.ConnectionError)
+                // 1. Send the request to the server (with possible retries)
+                while (attemptCount > 0)
                 {
-                    sentRequest = reqToSend;
-                    break;
-                }
-                
-                Debug.LogWarning("current request failed, retrying");
-                await Task.Delay(RetryDelayMilliseconds);
-                --attemptCount;
-                
-                // save the latest request we sent
-                sentRequest = reqToSend;
-            }
-            
-            // 2. Response extraction / error state logic
-            bool markFailure = false;
-            switch (webRequestOp.webRequest.result)
-            {
-                case UnityWebRequest.Result.Success:
-                    Debug.Log($"success, response: {sentRequest.downloadHandler.text}");
-                    response = JsonUtility.FromJson<TRes>(sentRequest.downloadHandler.text);
-                    break;
-                
-                case UnityWebRequest.Result.ConnectionError:
-                    Debug.LogError($"connection failure, reason: {sentRequest.error}, the server is not online, please try again later");
-                    markFailure = true;
-                    response = default(TRes);
-                    break;
-                
-                case UnityWebRequest.Result.ProtocolError:
-                    // 401 is an unauthorized error which tells us that the session
-                    // needs to be refreshed, so we will attempt a reload
-                    if (sentRequest.responseCode == 401)
+                    UnityWebRequest reqToSend = requestType == RequestType.Get
+                        ? UnityWebRequest.Get(uri)
+                        : UnityWebRequest.Post(uri, requestBody, "application/json");
+
+                    reqToSend.timeout = extraParams.Timeout;
+                    reqToSend.SetRequestHeader("Session-Id", GameRoot.Instance.AuthManager.SessionID);
+
+                    webRequestOp = reqToSend.SendWebRequest();
+                    await webRequestOp;
+
+                    // check if successful / has a protocol failure, if so, move one
+                    if (webRequestOp.webRequest.result != UnityWebRequest.Result.ConnectionError)
                     {
-                        Debug.LogError($"http failure, reason: {sentRequest.error}, reloading might fix the issue");
-                        GameRoot.Instance.ErrorManager.EnterErrorState(ErrorType.Unauthorized);
+                        sentRequest = reqToSend;
                         break;
                     }
-                    markFailure = true;
-                    response = default(TRes);
-                    break;
-            
-                default:
-                    Debug.LogError($"other failure, reason: {sentRequest.error}");
-                    markFailure = true;
-                    response = default(TRes);
-                    break;
+
+                    Debug.LogWarning("current request failed, retrying");
+                    await Task.Delay(RetryDelayMilliseconds);
+                    --attemptCount;
+
+                    // save the latest request we sent
+                    sentRequest = reqToSend;
+                }
+
+                // 2. Response extraction / error state logic
+                bool markFailure = false;
+                switch (webRequestOp.webRequest.result)
+                {
+                    case UnityWebRequest.Result.Success:
+                        Debug.Log($"success, response: {sentRequest.downloadHandler.text}");
+                        response = JsonUtility.FromJson<TRes>(sentRequest.downloadHandler.text);
+                        break;
+
+                    case UnityWebRequest.Result.ConnectionError:
+                        Debug.LogError(
+                            $"connection failure, reason: {sentRequest.error}, the server is not online, please try again later");
+                        markFailure = true;
+                        response = default(TRes);
+                        break;
+
+                    case UnityWebRequest.Result.ProtocolError:
+                        // 401 is an unauthorized error which tells us that the session
+                        // needs to be refreshed, so we will attempt a reload
+                        if (sentRequest.responseCode == 401)
+                        {
+                            Debug.LogError($"unauthorized failure (http 401), reason: {sentRequest.error}, reloading might fix the issue");
+                            GameRoot.Instance.ErrorManager.EnterErrorState(ErrorType.Unauthorized);
+                            break;
+                        }
+                        
+                        Debug.LogError($"http protocol error, response code: {sentRequest.responseCode} reason: {sentRequest.error}");
+                        markFailure = true;
+                        response = default(TRes);
+                        break;
+
+                    default:
+                        Debug.LogError($"other failure, reason: {sentRequest.error}");
+                        markFailure = true;
+                        response = default(TRes);
+                        break;
+                }
+
+                // this will prompt the error state if the extra params have specified it
+                if (markFailure && extraParams.ErrorOnFail != ErrorType.None)
+                {
+                    GameRoot.Instance.ErrorManager.EnterErrorState(extraParams.ErrorOnFail);
+                }
             }
-            
-            // this will prompt the error state if the extra params have specified it
-            if (markFailure && extraParams.ErrorOnFail != ErrorType.None)
+            catch (Exception exception)
             {
-                GameRoot.Instance.ErrorManager.EnterErrorState(extraParams.ErrorOnFail);
+               Debug.LogError($"net request manager exception: {exception.Message}");
+               GameRoot.Instance.ErrorManager.EnterErrorState(extraParams.ErrorOnFail);
             }
+
+
             return response;
         }
     }
