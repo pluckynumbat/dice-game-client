@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.Networking;
+using Model;
 
 namespace Network
 {
@@ -9,36 +8,14 @@ namespace Network
     /// </summary>
     public class PlayerDataRequest
     {
-        private const string ServerHost = "http://localhost";
-        private const string ServerPort = "8080";
         private const string Endpoint = "/profile/player-data/";
-    
-        public async Task<PlayerData> Send(string sessionID, string playerID, int timeout = 30)
+
+        public async Task<PlayerData> Send(string playerID, RequestParams extraParams)
         {
-            PlayerData playerData;
-        
-            string uri = $"{ServerHost}:{ServerPort}{Endpoint}{playerID}";
-        
-            UnityWebRequest getRequest = UnityWebRequest.Get(uri);
-            getRequest.timeout = timeout;
-        
-            getRequest.SetRequestHeader("Session-Id", sessionID);
+            PlayerData playerData =
+                await GameRoot.Instance.NetRequestManager.SendGetRequest<PlayerData>(
+                    $"{Endpoint}{playerID}", extraParams);
 
-            await getRequest.SendWebRequest();
-        
-            switch (getRequest.result)
-            {
-                case UnityWebRequest.Result.Success:
-                    Debug.Log($"success, player data response: {getRequest.downloadHandler.text}");
-                    playerData = JsonUtility.FromJson<PlayerData>(getRequest.downloadHandler.text);
-                    break;
-
-                default:
-                    Debug.LogError($"failure, reason: {getRequest.error}");
-                    playerData = default(PlayerData);
-                    break;
-            }
-        
             return playerData;
         }
     }

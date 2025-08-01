@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.Networking;
+using Model;
 
 namespace Network
 {
@@ -10,38 +9,14 @@ namespace Network
     /// </summary>
     public class GameConfigRequest
     {
-        private const string ServerHost = "http://localhost";
-        private const string ServerPort = "8080";
         private const string Endpoint = "/config/game-config";
 
-        public async Task<GameConfig> Send(string sessionID, int timeout = 15)
+        public async Task<GameConfig> Send(RequestParams extraParams)
         {
-            GameConfig gameConfig;
+            GameConfig gameConfig = 
+                await GameRoot.Instance.NetRequestManager.SendGetRequest<GameConfig>(
+                    $"{Endpoint}", extraParams);
 
-            string uri = $"{ServerHost}:{ServerPort}{Endpoint}";
-
-            UnityWebRequest getRequest = UnityWebRequest.Get(uri);
-            getRequest.timeout = timeout;
-
-            getRequest.SetRequestHeader("Session-Id", sessionID);
-            
-            // TODO: add more error / exception handling in the following code?
-
-            await getRequest.SendWebRequest();
-        
-            switch (getRequest.result)
-            {
-                case UnityWebRequest.Result.Success:
-                    Debug.Log($"success, game config response: {getRequest.downloadHandler.text}");
-                    gameConfig = JsonUtility.FromJson<GameConfig>(getRequest.downloadHandler.text);
-                    break;
-
-                default:
-                    Debug.LogError($"failure, reason: {getRequest.error}");
-                    gameConfig = default(GameConfig);
-                    break;
-            }
-        
             return gameConfig;
         }
     }
