@@ -22,24 +22,23 @@ namespace Model
         // Public helper method to send a POST request
         public async Task<TRes> SendPostRequest<TRes,TReq>(string endpoint, TReq requestBody, RequestParams extraParams) where TRes : struct where TReq : struct
         {
-            string uri = $"{ServerHost}:{ServerPort}{endpoint}";
             string postData = JsonUtility.ToJson(requestBody);
-            TRes response = await SendRequest<TRes>(RequestType.Post, uri, postData, extraParams);
+            TRes response = await SendRequest<TRes>(RequestType.Post, endpoint, postData, extraParams);
             return response;
         }
         
         // Public helper method to send a GET request
         public async Task<TRes> SendGetRequest<TRes>(string endpoint, RequestParams extraParams) where TRes : struct
         {
-            string uri = $"{ServerHost}:{ServerPort}{endpoint}";
-            TRes response = await SendRequest<TRes>(RequestType.Get, uri, null, extraParams);
+            TRes response = await SendRequest<TRes>(RequestType.Get, endpoint, null, extraParams);
             return response;
         }
 
         // The core function that sends the actual request to the server and reads the response
-        private async Task<TRes> SendRequest<TRes>(RequestType requestType, string uri, string requestBody, RequestParams extraParams) where TRes : struct
+        private async Task<TRes> SendRequest<TRes>(RequestType requestType, string endpoint, string requestBody, RequestParams extraParams) where TRes : struct
         {
             TRes response = default(TRes);
+            string uri = $"{ServerHost}:{ServerPort}{endpoint}";
             
             UnityWebRequest sentRequest = new UnityWebRequest();
             UnityWebRequestAsyncOperation webRequestOp = new UnityWebRequestAsyncOperation();
