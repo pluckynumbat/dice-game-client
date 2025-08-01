@@ -19,6 +19,23 @@ namespace Model
         private const string ServerPort = "8080";
         private const int RetryDelayMilliseconds = 1000;
         
+        // Public helper method to send a POST request
+        public async Task<TRes> SendPostRequest<TRes,TReq>(string endpoint, TReq requestBody, RequestParams extraParams) where TRes : struct where TReq : struct
+        {
+            string uri = $"{ServerHost}:{ServerPort}{endpoint}";
+            string postData = JsonUtility.ToJson(requestBody);
+            TRes response = await SendRequest<TRes>(RequestType.Post, uri, postData, extraParams);
+            return response;
+        }
+        
+        // Public helper method to send a GET request
+        public async Task<TRes> SendGetRequest<TRes>(string endpoint, RequestParams extraParams) where TRes : struct
+        {
+            string uri = $"{ServerHost}:{ServerPort}{endpoint}";
+            TRes response = await SendRequest<TRes>(RequestType.Get, uri, null, extraParams);
+            return response;
+        }
+
         // The core function that sends the actual request to the server and reads the response
         private async Task<TRes> SendRequest<TRes>(RequestType requestType, string uri, string requestBody, RequestParams extraParams) where TRes : struct
         {
