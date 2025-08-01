@@ -14,10 +14,8 @@ namespace Network
         public async Task<EnterLevelResponse> Send(string playerID, int level, RequestParams extraParams)
         {
             EnterLevelResponse enterLevelResponse =
-                await GameRoot.Instance.NetRequestManager.SendPostRequest<EnterLevelResponse, EnterLevelRequestBody>(
-                    Endpoint,
-                    new EnterLevelRequestBody() { playerID = playerID, level = level },
-                    extraParams);
+                await GameRoot.Instance.NetRequestManager.SendPostRequest<EnterLevelResponse, EnterLevelRequestBody>
+                    (Endpoint, new EnterLevelRequestBody() { playerID = playerID, level = level }, extraParams);
 
             return enterLevelResponse;
         }

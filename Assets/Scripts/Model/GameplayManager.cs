@@ -42,7 +42,8 @@ namespace Model
         {
             LevelResultRequest request = new LevelResultRequest();
             
-            LevelResultResponse responseData = await request.Send(GameRoot.Instance.AuthManager.SessionID, GameRoot.Instance.AuthManager.PlayerID, CurrentLevel, rolls);
+            LevelResultResponse responseData = await request.Send(GameRoot.Instance.AuthManager.PlayerID, CurrentLevel, rolls, 
+                new RequestParams() {Timeout = 10, Retries = 2, ErrorOnFail = ErrorType.CouldNotConnect});
 
             if (string.IsNullOrEmpty(responseData.playerData.playerID))
             {
