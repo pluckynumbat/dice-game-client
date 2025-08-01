@@ -12,11 +12,11 @@ namespace Network
 
         public async Task<PlayerData> Send(string playerID, RequestParams extraParams)
         {
-            PlayerData response =
+            PlayerData playerData =
                 await GameRoot.Instance.NetRequestManager.SendGetRequest<PlayerData>(
                     $"{Endpoint}{playerID}", extraParams);
 
-            return response;
+            return playerData;
         }
     }
 }
