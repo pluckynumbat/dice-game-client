@@ -95,7 +95,21 @@ namespace Model
             {
                 await loadingScreen.ShowProgress(.9f, 0.2f);
             }
+
+            // early out if either of the above 2 tasks fail
+            // we will already be in the critical error state based on their requests
+            if (!configTask.Result)
+            {
+                Debug.LogError("Fetch config task failed");
+                return;
+            }
             
+            if (!playerDataTask.Result)
+            {
+                Debug.LogError("Fetch player data / create new player task failed");
+                return;
+            }
+
             // fetch the player stats
             await FetchStatsTask(PlayerID);
             if (loadingScreen != null) // let the loading bar go to 90%
