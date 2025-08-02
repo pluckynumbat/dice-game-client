@@ -38,7 +38,7 @@ namespace Model
             return accessGranted;
         }
         
-        public async Task<LevelResult> RequestLevelResult(int[] rolls)
+        public async Task<LevelResultResponse> RequestLevelResult(int[] rolls)
         {
             LevelResultRequest request = new LevelResultRequest();
             
@@ -48,7 +48,7 @@ namespace Model
             if (string.IsNullOrEmpty(responseData.playerData.playerID))
             {
                 Debug.LogError("level result request failed :(");
-                return default(LevelResult);
+                return default(LevelResultResponse);
             }
 
             // request was successful (regardless of whether player won or not)
@@ -60,7 +60,7 @@ namespace Model
             CurrentLevel = 0;
             CurrentLevelConfig = default(LevelConfig);
             
-            return LatestLevelResult;
+            return responseData;
         }
     }
 }
