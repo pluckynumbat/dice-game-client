@@ -86,7 +86,9 @@ namespace Presentation.Gameplay.Screen
 
             if (win || lose)
             {
-                Task<LevelResultResponse> levelResultTask = myGameplayManager.RequestLevelResult(rolls.ToArray());
+                Task<LevelResultResponse> levelResultTask = myGameplayManager.RequestLevelResult(rolls.ToArray(), new RequestParams() 
+                    {Timeout = 10, Retries = 2, ErrorOnFail = ErrorType.CouldNotConnect}); // basic (recoverable) error if the request fails
+                
                 Task minDelayTask = Task.Delay(minimumLevelResultDelayMilliseconds);  // added to let the player view the dice result before changing game state
                 
                 await Task.WhenAll(levelResultTask, minDelayTask);
@@ -115,7 +117,8 @@ namespace Presentation.Gameplay.Screen
         private async Task ResendLevelResult()
         {
             rollButton.interactable = false;
-            LevelResultResponse levelResultResponse = await myGameplayManager.RequestLevelResult(rolls.ToArray());
+            LevelResultResponse levelResultResponse = await myGameplayManager.RequestLevelResult(rolls.ToArray(),  new RequestParams() 
+                {Timeout = 10, Retries = 2, ErrorOnFail = ErrorType.CouldNotConnect}); // basic (recoverable) error if the request fails;
             
             if (!string.IsNullOrEmpty(levelResultResponse.playerData.playerID))
             {
