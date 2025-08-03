@@ -14,12 +14,19 @@ namespace Presentation.Stats.Presenters
         [SerializeField] private GameObject statsEntryViewPrefab;
         [SerializeField] private Transform statsEntryContainerTransform;
 
+        [SerializeField] private GameObject noStatsYetGameObject; // text to display when stats are empty
+        
         private List<StatEntryView> cachedEntries;
 
         public void Init(PlayerLevelStats[] statsArray)
         {
-            // TODO: display a "no stats yet" message?
-            
+            bool noStatsToShow = statsArray == null || statsArray.Length == 0;
+            noStatsYetGameObject?.SetActive(noStatsToShow);
+            if (noStatsToShow)
+            {
+                return;
+            }
+
             if (cachedEntries == null)
             {
                 cachedEntries = new List<StatEntryView>();
