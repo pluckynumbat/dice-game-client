@@ -1,3 +1,4 @@
+using Model;
 using Presentation;
 using UnityEngine;
 
@@ -73,40 +74,40 @@ public class DebugMenu : MonoBehaviour
         
         if (GUILayout.Button("Send a Game Config Request to the server",  GUILayout.MaxWidth(Screen.width)))
         {
-            _ = GameRoot.Instance.ConfigManager.RequestConfig();
+            _ = GameRoot.Instance.ConfigManager.RequestConfig( new RequestParams() {Timeout = 5});
         }
         
         if (GUILayout.Button("Send a New Player Request to the server",  GUILayout.MaxWidth(Screen.width)))
         {
-            _ = GameRoot.Instance.PlayerManager.RequestNewPlayerCreation("test1234");
+            _ = GameRoot.Instance.PlayerManager.RequestNewPlayerCreation("test1234", new RequestParams() {Timeout = 5});
         }
         
         if (GUILayout.Button("Send a Player Data Request to the server",  GUILayout.MaxWidth(Screen.width)))
         {
-            _ = GameRoot.Instance.PlayerManager.RequestPlayerData("test1234");
+            _ = GameRoot.Instance.PlayerManager.RequestPlayerData("test1234",  new RequestParams() {Timeout = 5});
         }
         
         GUILayout.BeginHorizontal(GUILayout.MaxWidth(Screen.width));
         if (GUILayout.Button("Send a Stats Request \n to the server",  GUILayout.MaxWidth(Screen.width * 0.5f), GUILayout.MinHeight(50)))
         {
-            _ = GameRoot.Instance.PlayerManager.RequestPlayerStats(playerID1);
+            _ = GameRoot.Instance.PlayerManager.RequestPlayerStats(playerID1, new RequestParams() {Timeout = 5});
         }
         playerID1 = GUILayout.TextArea(playerID1);
         GUILayout.EndHorizontal();
         
         if (GUILayout.Button("Send an Enter Level Request to the server",  GUILayout.MaxWidth(Screen.width)))
         {
-            _ = GameRoot.Instance.GameplayManager.RequestLevelEntry(1);
+            _ = GameRoot.Instance.GameplayManager.RequestLevelEntry(1,  new RequestParams() {Timeout = 5});
         }
         
         if (GUILayout.Button("Send a Level Result Request (roll 6) to the server",  GUILayout.MaxWidth(Screen.width)))
         {
-            _ = GameRoot.Instance.GameplayManager.RequestLevelResult(new []{1, 6});
+            _ = GameRoot.Instance.GameplayManager.RequestLevelResult(new []{1, 6},  new RequestParams() {Timeout = 5});
         }
         
         if (GUILayout.Button("Send an Level Result Request (roll 1) to the server",  GUILayout.MaxWidth(Screen.width)))
         {
-            _ = GameRoot.Instance.GameplayManager.RequestLevelResult(new []{1, 1});
+            _ = GameRoot.Instance.GameplayManager.RequestLevelResult(new []{1, 1},  new RequestParams() {Timeout = 5});
         }
         
         if (GUILayout.Button("Send a Logout Request to the server",  GUILayout.MaxWidth(Screen.width)))
