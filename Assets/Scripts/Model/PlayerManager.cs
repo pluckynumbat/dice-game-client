@@ -12,10 +12,10 @@ namespace Model
         public PlayerData PlayerData;
         public PlayerStats Stats;
         
-        public async Task RequestNewPlayerCreation(string playerID)
+        public async Task RequestNewPlayerCreation(string playerID, RequestParams extraParams)
         {
             NewPlayerRequest request = new NewPlayerRequest();
-            PlayerData responseData = await request.Send(playerID, new RequestParams() {Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError});
+            PlayerData responseData = await request.Send(playerID, extraParams);
 
             if (string.IsNullOrEmpty(responseData.playerID))
             {
@@ -26,10 +26,10 @@ namespace Model
             PlayerData = responseData;
         }
         
-        public async Task RequestPlayerData(string playerID)
+        public async Task RequestPlayerData(string playerID, RequestParams extraParams)
         {
             PlayerDataRequest request = new PlayerDataRequest();
-            PlayerData responseData = await request.Send(playerID, new RequestParams() {Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError});
+            PlayerData responseData = await request.Send(playerID, extraParams);
 
             if (string.IsNullOrEmpty(responseData.playerID))
             {
@@ -40,10 +40,10 @@ namespace Model
             PlayerData = responseData;
         }
         
-        public async Task RequestPlayerStats(string playerID)
+        public async Task RequestPlayerStats(string playerID, RequestParams extraParams)
         {
             PlayerStatsRequest request = new PlayerStatsRequest();
-            PlayerStatsResponse response = await request.Send(playerID, new RequestParams() {Timeout = 5, Retries = 0});
+            PlayerStatsResponse response = await request.Send(playerID, extraParams);
 
             if (string.IsNullOrEmpty(response.playerID))
             {

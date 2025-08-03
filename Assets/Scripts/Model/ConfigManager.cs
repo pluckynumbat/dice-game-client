@@ -11,10 +11,10 @@ namespace Model
     {
         public GameConfig GameConfig { get; private set; }
         
-        public async Task RequestConfig()
+        public async Task RequestConfig(RequestParams extraParams)
         {
             GameConfigRequest request = new GameConfigRequest();
-            GameConfig responseData = await request.Send(new RequestParams() {Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError});
+            GameConfig responseData = await request.Send(extraParams);
             
             if (responseData.levels == null)
             {
