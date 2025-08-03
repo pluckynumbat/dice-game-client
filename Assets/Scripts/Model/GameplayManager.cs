@@ -12,13 +12,11 @@ namespace Model
         public int CurrentLevel;
         public LevelConfig CurrentLevelConfig;
         public LevelResult LatestLevelResult;
-        
-        public async Task<bool> RequestLevelEntry(int level)
+        public async Task<bool> RequestLevelEntry(int level, RequestParams extraParams)
         {
             EnterLevelRequest request = new EnterLevelRequest();
             
-            EnterLevelResponse responseData = await request.Send(GameRoot.Instance.AuthManager.PlayerID, level, 
-                new RequestParams() {Timeout = 10, Retries = 2, ErrorOnFail = ErrorType.CouldNotConnect});
+            EnterLevelResponse responseData = await request.Send(GameRoot.Instance.AuthManager.PlayerID, level, extraParams);
             
             if (string.IsNullOrEmpty(responseData.playerData.playerID))
             {
@@ -38,12 +36,11 @@ namespace Model
             return accessGranted;
         }
         
-        public async Task<LevelResultResponse> RequestLevelResult(int[] rolls)
+        public async Task<LevelResultResponse> RequestLevelResult(int[] rolls, RequestParams extraParams)
         {
             LevelResultRequest request = new LevelResultRequest();
             
-            LevelResultResponse responseData = await request.Send(GameRoot.Instance.AuthManager.PlayerID, CurrentLevel, rolls, 
-                new RequestParams() {Timeout = 10, Retries = 2, ErrorOnFail = ErrorType.CouldNotConnect});
+            LevelResultResponse responseData = await request.Send(GameRoot.Instance.AuthManager.PlayerID, CurrentLevel, rolls, extraParams);
 
             if (string.IsNullOrEmpty(responseData.playerData.playerID))
             {

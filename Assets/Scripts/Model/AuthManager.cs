@@ -172,7 +172,8 @@ namespace Model
 
         private async Task<bool> FetchConfigTask()
         {
-            await GameRoot.Instance.ConfigManager.RequestConfig();
+           await GameRoot.Instance.ConfigManager.RequestConfig(new RequestParams() 
+               { Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError}); // go into critical error state if the request fails
             return GameRoot.Instance.ConfigManager.GameConfig.levels != null;
         }
         
@@ -180,11 +181,13 @@ namespace Model
         {
             if (isNewPlayer)
             {
-                await GameRoot.Instance.PlayerManager.RequestNewPlayerCreation(playerID);
+                 await GameRoot.Instance.PlayerManager.RequestNewPlayerCreation(playerID, new RequestParams() 
+                     { Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError}); // go into critical error state if the request fails
             }
             else
             {
-                await GameRoot.Instance.PlayerManager.RequestPlayerData(playerID);
+               await GameRoot.Instance.PlayerManager.RequestPlayerData(playerID, new RequestParams()
+                    { Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError}); // go into critical error state if the request fails
             }
             
             return !string.IsNullOrEmpty(GameRoot.Instance.PlayerManager.PlayerData.playerID);
@@ -192,7 +195,7 @@ namespace Model
         
         private async Task FetchStatsTask(string playerID)
         {
-            await GameRoot.Instance.PlayerManager.RequestPlayerStats(playerID);
+            await GameRoot.Instance.PlayerManager.RequestPlayerStats(playerID,  new RequestParams() { Timeout = 5, Retries = 0 }); // no error state if this fails
         }
 
         // creates a base64 encoding of the string <username:password> and adds a prefix "Basic " to it
