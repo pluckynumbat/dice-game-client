@@ -11,13 +11,14 @@ namespace Network
     /// </summary>
     public class LoginRequest
     {
+        private const string Port = Constants.AuthServerPort;
         private const string Endpoint = "/auth/login";
     
         public async Task<AuthLoginData> Send(string authString, bool isNewUser, string serverVersion, int timeout = 10)
         {
             AuthLoginData authLoginData;
         
-            string uri = $"{NetRequestManager.ServerHost}:{NetRequestManager.ServerPort}{Endpoint}";
+            string uri = $"{Constants.ServerHost}:{Port}{Endpoint}";
             
             LoginRequestBody requestBody = new LoginRequestBody()
             {

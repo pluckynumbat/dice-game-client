@@ -10,13 +10,14 @@ namespace Network
     /// </summary>
     public class LogoutRequest
     {
+        private const string Port = Constants.AuthServerPort;
         private const string Endpoint = "/auth/logout";
     
         public async Task<bool> Send(string sessionID, int timeout = 5)
         {
             bool success;
             
-            string uri = $"{NetRequestManager.ServerHost}:{NetRequestManager.ServerPort}{Endpoint}";
+            string uri = $"{Constants.ServerHost}:{Port}{Endpoint}";
             
             UnityWebRequest deleteRequest = UnityWebRequest.Delete(uri);
             deleteRequest.timeout = timeout;

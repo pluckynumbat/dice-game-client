@@ -1,8 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Model;
-using UnityEngine;
-using UnityEngine.Networking;
 
 namespace Network
 {
@@ -11,13 +9,14 @@ namespace Network
     /// </summary>
     public class PlayerStatsRequest
     {
+        private const string Port = Constants.StatsServerPort;
         private const string Endpoint = "/stats/player-stats/";
     
         public async Task<PlayerStatsResponse> Send(string playerID, RequestParams extraParams)
         {
             PlayerStatsResponse playerStatsResponse =  await 
                 GameRoot.Instance.NetRequestManager.SendGetRequest<PlayerStatsResponse>(
-                $"{Endpoint}{playerID}", extraParams);
+                Port, $"{Endpoint}{playerID}", extraParams);
             return playerStatsResponse;
         }
     }
