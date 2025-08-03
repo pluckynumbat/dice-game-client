@@ -9,13 +9,14 @@ namespace Network
     /// </summary>
     public class EnterLevelRequest
     {
+        private const string Port = Constants.GameplayServerPort;
         private const string Endpoint = "/gameplay/entry";
 
         public async Task<EnterLevelResponse> Send(string playerID, int level, RequestParams extraParams)
         {
             EnterLevelResponse enterLevelResponse =
                 await GameRoot.Instance.NetRequestManager.SendPostRequest<EnterLevelResponse, EnterLevelRequestBody>
-                    (Endpoint, new EnterLevelRequestBody() { playerID = playerID, level = level }, extraParams);
+                    (Port, Endpoint, new EnterLevelRequestBody() { playerID = playerID, level = level }, extraParams);
 
             return enterLevelResponse;
         }

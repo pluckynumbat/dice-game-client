@@ -9,13 +9,14 @@ namespace Network
     /// </summary>
     public class GameConfigRequest
     {
+        private const string Port = Constants.ConfigServerPort;
         private const string Endpoint = "/config/game-config";
 
         public async Task<GameConfig> Send(RequestParams extraParams)
         {
             GameConfig gameConfig = 
                 await GameRoot.Instance.NetRequestManager.SendGetRequest<GameConfig>(
-                    $"{Endpoint}", extraParams);
+                    Port,Endpoint, extraParams);
 
             return gameConfig;
         }

@@ -9,12 +9,13 @@ namespace Network
     /// </summary>
     public class NewPlayerRequest
     {
+        private const string Port = Constants.ProfileServerPort;
         private const string Endpoint = "/profile/new-player";
     
         public async Task<PlayerData> Send(string playerID, RequestParams extraParams)
         {
             PlayerData playerData = await GameRoot.Instance.NetRequestManager.SendPostRequest
-                <PlayerData, NewPlayerRequestBody>(Endpoint, new NewPlayerRequestBody() {playerID = playerID}, extraParams);
+                <PlayerData, NewPlayerRequestBody>(Port, Endpoint, new NewPlayerRequestBody() {playerID = playerID}, extraParams);
             
             return playerData;
         }
