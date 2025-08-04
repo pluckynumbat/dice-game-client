@@ -188,8 +188,8 @@ namespace Model
             }
             else // the client considers itself an existing user
             {
-                // here the auth server might consider the player to be new or existing based on its own server version. In either case,
-                // this status is actually dependent on whether there is player data on the data server for this player, which there should be
+                // the auth server might consider the player to be new or existing based on its own server version. In either case,
+                // this status actually depends on whether there is player data on the data server for this player, which there should be
                 // unless the data server was restarted since the last time the player logged in. So let's check by sending the Get Player request:
                 // if it succeeds, we proceed as an existing player. If it fails with an http status 404, that is fine, and we will proceed as a new player
                 await GameRoot.Instance.PlayerManager.RequestPlayerData(playerID, new RequestParams()
