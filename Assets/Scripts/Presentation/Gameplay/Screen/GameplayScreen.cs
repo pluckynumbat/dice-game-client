@@ -128,5 +128,24 @@ namespace Presentation.Gameplay.Screen
                 rollButton.interactable = true;
             }
         }
+
+        // create and send a level result request that, on failure, leads to a basic (recoverable) error,
+        // unless the http status codes are bad request (400) or internal server error (500),
+        // in which case, we should go into critical error state
+        private Task<LevelResultResponse> SendLevelResultRequest(int[] rollsToSend)
+        {
+            // create the level result task with the request containing the rolls, and the extra params with the errors
+            return myGameplayManager.RequestLevelResult(rollsToSend,
+                new RequestParams()
+                {
+                    Timeout = 10, Retries = 2, DefaultErrorOnFail = ErrorType.CouldNotConnect,
+                    CustomHttpStatusBasedErrors = new Dictionary<HttpStatusCode, ErrorType>()
+                    {
+                        [HttpStatusCode.BadRequest] = ErrorType.CriticalError,
+                        [HttpStatusCode.InternalServerError] = ErrorType.CriticalError,
+                    }
+                }
+            );
+        }
     }
 }
