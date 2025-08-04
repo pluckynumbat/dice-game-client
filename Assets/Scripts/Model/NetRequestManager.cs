@@ -75,6 +75,8 @@ namespace Model
 
                 // 2. Response extraction / error state logic
                 bool markFailure = false;
+                ErrorType errorOnFail = extraParams.DefaultErrorOnFail;
+                
                 switch (webRequestOp.webRequest.result)
                 {
                     case UnityWebRequest.Result.Success:
@@ -90,6 +92,19 @@ namespace Model
                         break;
 
                     case UnityWebRequest.Result.ProtocolError:
+                        // first check if there is a custom http status based error that
+                        // was specified in the extra params, and if our current error matches that
+                        HttpStatusCode statusCode = (HttpStatusCode)sentRequest.responseCode;
+                        if (extraParams.CustomHttpStatusBasedErrors != null &&
+                            extraParams.CustomHttpStatusBasedErrors.ContainsKey(statusCode))
+                        {
+                            errorOnFail = extraParams.CustomHttpStatusBasedErrors[statusCode];
+                            Debug.LogWarning($"http protocol error, response code: {sentRequest.responseCode} reason: {sentRequest.error}");
+                            Debug.LogWarning($"this response has a custom error state {errorOnFail} in the request, will go to that");
+                            markFailure = true;
+                            break;
+                        }
+                        
                         // 401 is an unauthorized error which tells us that the session
                         // needs to be refreshed, so we will attempt a reload
                         if (sentRequest.responseCode == 401)
