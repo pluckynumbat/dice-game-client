@@ -37,7 +37,7 @@ namespace Model
         private async Task<TRes> SendRequest<TRes>(RequestType requestType, string port, string endpoint, string requestBody, RequestParams extraParams) where TRes : struct
         {
             TRes response = default(TRes);
-            string uri = $"{Constants.ServerHost}:{port}{endpoint}";
+            string uri = $"{Constants.ServerProtocol}://{Constants.ServerHost}:{port}{endpoint}";
             
             UnityWebRequest sentRequest = new UnityWebRequest();
             UnityWebRequestAsyncOperation webRequestOp = new UnityWebRequestAsyncOperation();

@@ -5,7 +5,8 @@ using UnityEngine;
 /// </summary>
 public class Constants : MonoBehaviour
 {
-    public const string ServerHost = "http://localhost";
+    public const string ServerProtocol = "http";
+    public const string ServerHost = "localhost";
     
     public const string AuthServerPort = "10101";
     public const string DataServerPort = "20202";
