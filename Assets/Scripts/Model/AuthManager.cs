@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Network;
 using Presentation.Loading.Screen;
@@ -193,7 +195,8 @@ namespace Model
                 // unless the data server was restarted since the last time the player logged in. So let's check by sending the Get Player request:
                 // if it succeeds, we proceed as an existing player. If it fails with an http status 404, that is fine, and we will proceed as a new player
                 await GameRoot.Instance.PlayerManager.RequestPlayerData(playerID, new RequestParams()
-                    { Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError, IsNotFoundOk = true}); // any fail status other than 404 should go into critical error state
+                    { Timeout = 10, Retries = 1, DefaultErrorOnFail = ErrorType.CriticalError, 
+                        CustomHttpStatusBasedErrors = new Dictionary<HttpStatusCode, ErrorType> {[HttpStatusCode.NotFound]  = ErrorType.None}}); // any fail status other than 404 should go into critical error state
                    
                 // ^if the above request failed with a 404 (there was no data stored that can be recovered), proceed as a new player
                 if (string.IsNullOrEmpty(GameRoot.Instance.PlayerManager.PlayerData.playerID))
