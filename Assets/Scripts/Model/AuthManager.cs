@@ -172,7 +172,7 @@ namespace Model
         private async Task<bool> FetchConfigTask()
         {
            await GameRoot.Instance.ConfigManager.RequestConfig(new RequestParams() 
-               { Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError}); // go into critical error state if the request fails
+               { Timeout = 10, Retries = 1, DefaultErrorOnFail = ErrorType.CriticalError}); // go into critical error state if the request fails
             return GameRoot.Instance.ConfigManager.GameConfig.levels != null;
         }
         
@@ -184,7 +184,7 @@ namespace Model
             if (isNewPlayerWrtClient)
             {
                  await GameRoot.Instance.PlayerManager.RequestNewPlayerCreation(playerID, new RequestParams() 
-                     { Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError}); // go into critical error state if the request fails
+                     { Timeout = 10, Retries = 1, DefaultErrorOnFail = ErrorType.CriticalError}); // go into critical error state if the request fails
             }
             else // the client considers itself an existing user
             {
@@ -199,7 +199,7 @@ namespace Model
                 if (string.IsNullOrEmpty(GameRoot.Instance.PlayerManager.PlayerData.playerID))
                 {
                     await GameRoot.Instance.PlayerManager.RequestNewPlayerCreation(playerID, new RequestParams()
-                        { Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError}); // go into critical error state if the request fails
+                        { Timeout = 10, Retries = 1, DefaultErrorOnFail = ErrorType.CriticalError}); // go into critical error state if the request fails
                 }
             }
             
