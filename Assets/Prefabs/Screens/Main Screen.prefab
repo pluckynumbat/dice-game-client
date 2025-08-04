@@ -939,6 +939,7 @@ MonoBehaviour:
   levelSelectionPresenter: {fileID: 8241610972539760628}
   energyPresenter: {fileID: 977209124115238707}
   playerIdPresenter: {fileID: 7813348140750654106}
+  enterLevelDelayMilliseconds: 500
 --- !u!1 &4356331566891394672
 GameObject:
   m_ObjectHideFlags: 0

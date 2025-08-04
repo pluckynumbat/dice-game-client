@@ -18,6 +18,11 @@ namespace Presentation.Main.Presenters
         {
             levelCount = totalLevels;
             CurrentLevelIndex = currentLevel - 1;
+
+            // disable the arrows if there's only 1 level available to play
+            leftButton?.gameObject.SetActive(totalLevels > 1);
+            rightButton?.gameObject.SetActive(totalLevels > 1);
+
             UpdateText();
         }
         

@@ -15,6 +15,8 @@ namespace Presentation.Main.Screen
         [SerializeField] private LevelSelectionPresenter levelSelectionPresenter;
         [SerializeField] private EnergyPresenter energyPresenter;
         [SerializeField] private PlayerIdPresenter playerIdPresenter;
+        
+        [SerializeField] private int enterLevelDelayMilliseconds;
 
         private ConfigManager myConfigManager;
         private PlayerManager myPlayerManager;
@@ -91,6 +93,7 @@ namespace Presentation.Main.Screen
             {
                 playerEnergyEstimate = myPlayerManager.PlayerData.energy;
                 energyPresenter.ConsumeEnergy(levelConfig.energyCost);
+                await Task.Delay(enterLevelDelayMilliseconds); // added to let the player view the reduced energy before changing game state
                 myStateManager.ChangeGameState(StateManager.GameState.LevelInProgress);
             }
             else
