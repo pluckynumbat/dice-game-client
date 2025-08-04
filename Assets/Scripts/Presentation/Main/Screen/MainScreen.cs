@@ -80,7 +80,6 @@ namespace Presentation.Main.Screen
             if (playerEnergyEstimate < levelConfig.energyCost)
             {
                 myErrorManager.EnterErrorState(ErrorType.NotEnoughEnergy);
-                Debug.Log("cannot enter, our current energy is too low");
                 return;
             }
 
