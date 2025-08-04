@@ -63,7 +63,7 @@ namespace Model
             GameRoot.Instance.StateManager.ChangeGameState(StateManager.GameState.Auth);
             if (loadingScreen != null)
             {
-                await loadingScreen?.ShowProgress(.1f, 0.1f);
+                await loadingScreen.ShowProgress(.1f, 0.1f);
             }
 
             // core task: start basic authentication task and await on results
