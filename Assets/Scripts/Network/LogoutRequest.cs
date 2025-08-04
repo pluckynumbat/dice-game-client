@@ -17,7 +17,7 @@ namespace Network
         {
             bool success;
             
-            string uri = $"{Constants.ServerHost}:{Port}{Endpoint}";
+            string uri = $"{Constants.ServerProtocol}://{Constants.ServerHost}:{Port}{Endpoint}";
             
             UnityWebRequest deleteRequest = UnityWebRequest.Delete(uri);
             deleteRequest.timeout = timeout;

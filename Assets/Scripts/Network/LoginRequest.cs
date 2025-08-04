@@ -18,7 +18,7 @@ namespace Network
         {
             AuthLoginData authLoginData;
         
-            string uri = $"{Constants.ServerHost}:{Port}{Endpoint}";
+            string uri = $"{Constants.ServerProtocol}://{Constants.ServerHost}:{Port}{Endpoint}";
             
             LoginRequestBody requestBody = new LoginRequestBody()
             {
