@@ -104,7 +104,6 @@ namespace Presentation.Gameplay.Screen
                 }
 
                 // the request succeeded, move on to the level end state and show the result
-                Debug.Log("level " + (levelResultTask.Result.levelResult.won ? "won" : "lost"));
                 myStateManager.ChangeGameState(StateManager.GameState.LevelEnd);
             }
             else
@@ -122,7 +121,6 @@ namespace Presentation.Gameplay.Screen
             
             if (!string.IsNullOrEmpty(levelResultResponse.playerData.playerID))
             {
-                Debug.Log("level " + (levelResultResponse.levelResult.won ? "won" : "lost"));
                 myStateManager.ChangeGameState(StateManager.GameState.LevelEnd);
             }
             else

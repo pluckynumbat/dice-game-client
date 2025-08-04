@@ -40,7 +40,6 @@ namespace Network
                     Debug.Log($"success! your player id is: {postRequest.downloadHandler.text}");
                     authLoginData.loginResponse = JsonUtility.FromJson<LoginResponse>(postRequest.downloadHandler.text);
                     authLoginData.sessionID = postRequest.GetResponseHeader("Session-Id"); // get the session id from the header
-                    Debug.Log($"session id: {authLoginData.sessionID}");
                     break;
 
                 default:

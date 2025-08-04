@@ -33,7 +33,7 @@ namespace Model
 
             if (string.IsNullOrEmpty(responseData.playerID))
             {
-                Debug.LogError("could not get the player data :(");
+                Debug.LogWarning("could not get the player data :(");
                 return;
             }
             
