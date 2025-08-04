@@ -127,9 +127,8 @@ namespace Model
             string existingGuid = PlayerPrefs.GetString("player-guid", null);
             string serverVersion = PlayerPrefs.GetString("server-version", null);
             
-            // NOTE: isNewUser will just be a suggestion to the server. If the server was started 
-            // after our user was created (serverVersion mismatch), this user will still be treated 
-            // as a new user.
+            // NOTE: isNewUser will just be a suggestion to the auth server. If the server was (re)started after our user was created, 
+            // (serverVersion mismatch), this user will still be treated as a new user from the perspective of the auth server
             bool isNewUserRequest = string.IsNullOrEmpty(existingGuid);
             string requestServerVersion = !string.IsNullOrEmpty(serverVersion) ? serverVersion : "0";
             
