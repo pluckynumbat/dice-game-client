@@ -39,7 +39,7 @@ namespace Model
         {
             if (SessionID == null)
             {
-                Debug.LogError("cannot logout, the session ID is null");
+                Debug.LogWarning("cannot logout, the session ID is null");
             }
 
             LogoutRequest request = new LogoutRequest();
@@ -52,7 +52,7 @@ namespace Model
             }
             else
             {
-                Debug.LogError("could not logout :(");
+                Debug.LogWarning("could not logout :(");
             }
         }
         

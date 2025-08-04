@@ -20,7 +20,7 @@ namespace Model
             
             if (string.IsNullOrEmpty(responseData.playerData.playerID))
             {
-                Debug.LogError("enter level request failed :(");
+                Debug.LogWarning("enter level request failed :(");
                 return false;
             }
 
