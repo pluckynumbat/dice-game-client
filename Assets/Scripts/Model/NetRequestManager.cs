@@ -135,15 +135,15 @@ namespace Model
                 }
 
                 // this will prompt the error state if the extra params have specified it
-                if (markFailure && extraParams.ErrorOnFail != ErrorType.None)
+                if (markFailure && errorOnFail != ErrorType.None)
                 {
-                    GameRoot.Instance.ErrorManager.EnterErrorState(extraParams.ErrorOnFail);
+                    GameRoot.Instance.ErrorManager.EnterErrorState(errorOnFail);
                 }
             }
             catch (Exception exception)
             {
                Debug.LogError($"net request manager exception: {exception.Message}");
-               GameRoot.Instance.ErrorManager.EnterErrorState(extraParams.ErrorOnFail);
+               GameRoot.Instance.ErrorManager.EnterErrorState(extraParams.DefaultErrorOnFail);
             }
 
 
