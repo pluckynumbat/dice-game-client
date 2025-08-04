@@ -107,10 +107,11 @@ namespace Model
                         
                         // 401 is an unauthorized error which tells us that the session
                         // needs to be refreshed, so we will attempt a reload
-                        if (sentRequest.responseCode == 401)
+                        if (statusCode == HttpStatusCode.Unauthorized)
                         {
+                            errorOnFail = ErrorType.Unauthorized;
                             Debug.LogError($"unauthorized failure (http 401), reason: {sentRequest.error}, reloading might fix the issue");
-                            GameRoot.Instance.ErrorManager.EnterErrorState(ErrorType.Unauthorized);
+                            markFailure = true;
                             break;
                         }
 
@@ -125,13 +126,11 @@ namespace Model
 
                         Debug.LogError($"http protocol error, response code: {sentRequest.responseCode} reason: {sentRequest.error}");
                         markFailure = true;
-                        response = default(TRes);
                         break;
 
                     default:
                         Debug.LogError($"other failure, reason: {sentRequest.error}");
                         markFailure = true;
-                        response = default(TRes);
                         break;
                 }
 
