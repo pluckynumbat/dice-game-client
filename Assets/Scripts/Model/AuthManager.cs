@@ -127,9 +127,8 @@ namespace Model
             string existingGuid = PlayerPrefs.GetString("player-guid", null);
             string serverVersion = PlayerPrefs.GetString("server-version", null);
             
-            // NOTE: isNewUser will just be a suggestion to the server. If the server was started 
-            // after our user was created (serverVersion mismatch), this user will still be treated 
-            // as a new user.
+            // NOTE: isNewUser will just be a suggestion to the auth server. If the server was (re)started after our user was created, 
+            // (serverVersion mismatch), this user will still be treated as a new user from the perspective of the auth server
             bool isNewUserRequest = string.IsNullOrEmpty(existingGuid);
             string requestServerVersion = !string.IsNullOrEmpty(serverVersion) ? serverVersion : "0";
             
@@ -158,8 +157,8 @@ namespace Model
             // 5. write values to the task result (and player prefs) based on the response
             BasicAuthTaskResult result;
             result.Success = !string.IsNullOrEmpty(loginData.loginResponse.playerID);
-            result.ServerVersion = loginData.loginResponse.serverVersion;
-            result.IsNewUser = (result.ServerVersion != requestServerVersion) || isNewUserRequest;
+            result.IsNewUser = isNewUserRequest;
+            
             if (result.Success)
             {
                 PlayerPrefs.SetString("player-guid", authGuidToUse);
@@ -177,17 +176,31 @@ namespace Model
             return GameRoot.Instance.ConfigManager.GameConfig.levels != null;
         }
         
-        private async Task<bool> FetchPlayerDataTask(string playerID, bool isNewPlayer)
+        // depending on new user VS existing user, the following task has different flows
+        private async Task<bool> FetchPlayerDataTask(string playerID, bool isNewPlayerWrtClient)
         {
-            if (isNewPlayer)
+            // in this case (client thinks it is a new user), the auth server cannot consider the client to be an
+            // existing user (actual server version will never be 0), so we are good to proceed as a new player
+            if (isNewPlayerWrtClient)
             {
                  await GameRoot.Instance.PlayerManager.RequestNewPlayerCreation(playerID, new RequestParams() 
                      { Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError}); // go into critical error state if the request fails
             }
-            else
+            else // the client considers itself an existing user
             {
-               await GameRoot.Instance.PlayerManager.RequestPlayerData(playerID, new RequestParams()
-                    { Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError}); // go into critical error state if the request fails
+                // the auth server might consider the player to be new or existing based on its own server version. In either case,
+                // this status actually depends on whether there is player data on the data server for this player, which there should be
+                // unless the data server was restarted since the last time the player logged in. So let's check by sending the Get Player request:
+                // if it succeeds, we proceed as an existing player. If it fails with an http status 404, that is fine, and we will proceed as a new player
+                await GameRoot.Instance.PlayerManager.RequestPlayerData(playerID, new RequestParams()
+                    { Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError, IsNotFoundOk = true}); // any fail status other than 404 should go into critical error state
+                   
+                // ^if the above request failed with a 404 (there was no data stored that can be recovered), proceed as a new player
+                if (string.IsNullOrEmpty(GameRoot.Instance.PlayerManager.PlayerData.playerID))
+                {
+                    await GameRoot.Instance.PlayerManager.RequestNewPlayerCreation(playerID, new RequestParams()
+                        { Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError}); // go into critical error state if the request fails
+                }
             }
             
             return !string.IsNullOrEmpty(GameRoot.Instance.PlayerManager.PlayerData.playerID);
@@ -210,7 +223,6 @@ namespace Model
     struct BasicAuthTaskResult
     {
         public bool Success;
-        public bool IsNewUser;
-        public string ServerVersion;
+        public bool IsNewUser; // this is if the client believes itself to be a new user
     }
 }

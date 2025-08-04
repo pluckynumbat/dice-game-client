@@ -98,7 +98,16 @@ namespace Model
                             GameRoot.Instance.ErrorManager.EnterErrorState(ErrorType.Unauthorized);
                             break;
                         }
-                        
+
+                        // 404 is the not found error, but it can be an acceptable response
+                        // *Only If* the caller specifies that in the extra params
+                        if (sentRequest.responseCode == 404 && extraParams.IsNotFoundOk)
+                        {
+                            Debug.LogWarning("request returned a not found error (http 404); the params say it is ok, so not marking as failure");
+                            response = default(TRes);
+                            break;
+                        }
+
                         Debug.LogError($"http protocol error, response code: {sentRequest.responseCode} reason: {sentRequest.error}");
                         markFailure = true;
                         response = default(TRes);
@@ -128,11 +137,12 @@ namespace Model
         }
     }
     
-    // extra parameters sent by other managers to control specific aspects (usually tied to failure)
+    // extra parameters sent by other managers / callers to control specific aspects (usually tied to failure)
     public struct RequestParams
     {
         public int Timeout;
         public int Retries;
         public ErrorType ErrorOnFail;
+        public bool IsNotFoundOk; // some requests can consider an http 404 response as acceptable
     }
 }
