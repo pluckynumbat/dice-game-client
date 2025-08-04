@@ -159,7 +159,6 @@ namespace Model
             
             result.Success = !string.IsNullOrEmpty(loginData.loginResponse.playerID);
             result.IsNewUser = isNewUserRequest;
-            result.ServerVersion = loginData.loginResponse.serverVersion;
             
             if (result.Success)
             {
@@ -211,7 +210,6 @@ namespace Model
     struct BasicAuthTaskResult
     {
         public bool Success;
-        public bool IsNewUser;
-        public string ServerVersion;
+        public bool IsNewUser; // this is if the client believes itself to be a new user
     }
 }
