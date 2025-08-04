@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Model;
 using Network;
@@ -86,9 +87,10 @@ namespace Presentation.Gameplay.Screen
 
             if (win || lose)
             {
-                Task<LevelResultResponse> levelResultTask = myGameplayManager.RequestLevelResult(rolls.ToArray(), new RequestParams() 
-                    {Timeout = 10, Retries = 2, DefaultErrorOnFail = ErrorType.CouldNotConnect}); // basic (recoverable) error if the request fails
-                
+                // create the level result task with the request containing the rolls, the helper 
+                // function will add the extra params needed as per our specific requirements
+                Task<LevelResultResponse> levelResultTask = SendLevelResultRequest(rolls.ToArray());
+
                 Task minDelayTask = Task.Delay(minimumLevelResultDelayMilliseconds);  // added to let the player view the dice result before changing game state
                 
                 await Task.WhenAll(levelResultTask, minDelayTask);
@@ -116,8 +118,9 @@ namespace Presentation.Gameplay.Screen
         private async Task ResendLevelResult()
         {
             rollButton.interactable = false;
-            LevelResultResponse levelResultResponse = await myGameplayManager.RequestLevelResult(rolls.ToArray(),  new RequestParams() 
-                {Timeout = 10, Retries = 2, DefaultErrorOnFail = ErrorType.CouldNotConnect}); // basic (recoverable) error if the request fails;
+            
+            // send another request, similar to the initial one
+            LevelResultResponse levelResultResponse = await SendLevelResultRequest(rolls.ToArray());
             
             if (!string.IsNullOrEmpty(levelResultResponse.playerData.playerID))
             {
