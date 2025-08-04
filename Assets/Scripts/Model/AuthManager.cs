@@ -156,9 +156,11 @@ namespace Model
             
             // 5. write values to the task result (and player prefs) based on the response
             BasicAuthTaskResult result;
+            
             result.Success = !string.IsNullOrEmpty(loginData.loginResponse.playerID);
+            result.IsNewUser = isNewUserRequest;
             result.ServerVersion = loginData.loginResponse.serverVersion;
-            result.IsNewUser = (result.ServerVersion != requestServerVersion) || isNewUserRequest;
+            
             if (result.Success)
             {
                 PlayerPrefs.SetString("player-guid", authGuidToUse);
