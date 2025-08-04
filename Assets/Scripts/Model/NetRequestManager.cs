@@ -106,7 +106,7 @@ namespace Model
                             markFailure = true;
                             break;
                         }
-                        
+
                         // 401 is an unauthorized error which tells us that the session
                         // needs to be refreshed, so we will attempt a reload
                         if (statusCode == HttpStatusCode.Unauthorized)
@@ -116,7 +116,7 @@ namespace Model
                             markFailure = true;
                             break;
                         }
-                        
+
                         Debug.LogError($"http protocol error, response code: {sentRequest.responseCode} reason: {sentRequest.error}");
                         markFailure = true;
                         break;
