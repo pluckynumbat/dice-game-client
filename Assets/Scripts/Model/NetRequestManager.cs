@@ -142,7 +142,7 @@ namespace Model
     {
         public int Timeout;
         public int Retries;
-        public ErrorType ErrorOnFail;
-        public bool IsNotFoundOk; // some requests can consider an http 404 response as acceptable
+        public ErrorType DefaultErrorOnFail;
+        public Dictionary<HttpStatusCode, ErrorType> CustomHttpStatusBasedErrors;
     }
 }
