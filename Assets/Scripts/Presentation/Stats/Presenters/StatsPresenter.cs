@@ -21,7 +21,10 @@ namespace Presentation.Stats.Presenters
         public void Init(PlayerLevelStats[] statsArray)
         {
             bool noStatsToShow = statsArray == null || statsArray.Length == 0;
+            
             noStatsYetGameObject?.SetActive(noStatsToShow);
+            statsEntryContainerTransform?.gameObject.SetActive(!noStatsToShow);
+            
             if (noStatsToShow)
             {
                 return;
