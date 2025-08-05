@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -75,6 +77,8 @@ namespace Model
 
                 // 2. Response extraction / error state logic
                 bool markFailure = false;
+                ErrorType errorOnFail = extraParams.DefaultErrorOnFail;
+                
                 switch (webRequestOp.webRequest.result)
                 {
                     case UnityWebRequest.Result.Success:
@@ -90,46 +94,49 @@ namespace Model
                         break;
 
                     case UnityWebRequest.Result.ProtocolError:
-                        // 401 is an unauthorized error which tells us that the session
-                        // needs to be refreshed, so we will attempt a reload
-                        if (sentRequest.responseCode == 401)
+                        // first check if there is a custom http status based error that
+                        // was specified in the extra params, and if our current error matches that
+                        HttpStatusCode statusCode = (HttpStatusCode)sentRequest.responseCode;
+                        if (extraParams.CustomHttpStatusBasedErrors != null &&
+                            extraParams.CustomHttpStatusBasedErrors.ContainsKey(statusCode))
                         {
-                            Debug.LogError($"unauthorized failure (http 401), reason: {sentRequest.error}, reloading might fix the issue");
-                            GameRoot.Instance.ErrorManager.EnterErrorState(ErrorType.Unauthorized);
+                            errorOnFail = extraParams.CustomHttpStatusBasedErrors[statusCode];
+                            Debug.LogWarning($"http protocol error, response code: {sentRequest.responseCode} reason: {sentRequest.error} \n " +
+                                             $"this request has a custom error state {errorOnFail} for this response");
+                            markFailure = true;
                             break;
                         }
 
-                        // 404 is the not found error, but it can be an acceptable response
-                        // *Only If* the caller specifies that in the extra params
-                        if (sentRequest.responseCode == 404 && extraParams.IsNotFoundOk)
+                        // 401 is an unauthorized error which tells us that the session
+                        // needs to be refreshed, so we will attempt a reload
+                        if (statusCode == HttpStatusCode.Unauthorized)
                         {
-                            Debug.LogWarning("request returned a not found error (http 404); the params say it is ok, so not marking as failure");
-                            response = default(TRes);
+                            errorOnFail = ErrorType.Unauthorized;
+                            Debug.LogError($"unauthorized failure (http 401), reason: {sentRequest.error}, reloading might fix the issue");
+                            markFailure = true;
                             break;
                         }
 
                         Debug.LogError($"http protocol error, response code: {sentRequest.responseCode} reason: {sentRequest.error}");
                         markFailure = true;
-                        response = default(TRes);
                         break;
 
                     default:
                         Debug.LogError($"other failure, reason: {sentRequest.error}");
                         markFailure = true;
-                        response = default(TRes);
                         break;
                 }
 
                 // this will prompt the error state if the extra params have specified it
-                if (markFailure && extraParams.ErrorOnFail != ErrorType.None)
+                if (markFailure && errorOnFail != ErrorType.None)
                 {
-                    GameRoot.Instance.ErrorManager.EnterErrorState(extraParams.ErrorOnFail);
+                    GameRoot.Instance.ErrorManager.EnterErrorState(errorOnFail);
                 }
             }
             catch (Exception exception)
             {
                Debug.LogError($"net request manager exception: {exception.Message}");
-               GameRoot.Instance.ErrorManager.EnterErrorState(extraParams.ErrorOnFail);
+               GameRoot.Instance.ErrorManager.EnterErrorState(extraParams.DefaultErrorOnFail);
             }
 
 
@@ -142,7 +149,7 @@ namespace Model
     {
         public int Timeout;
         public int Retries;
-        public ErrorType ErrorOnFail;
-        public bool IsNotFoundOk; // some requests can consider an http 404 response as acceptable
+        public ErrorType DefaultErrorOnFail;
+        public Dictionary<HttpStatusCode, ErrorType> CustomHttpStatusBasedErrors;
     }
 }

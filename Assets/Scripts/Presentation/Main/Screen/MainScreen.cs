@@ -88,7 +88,7 @@ namespace Presentation.Main.Screen
             playButton.interactable = false;
             
             bool canEnter = await myGameplayManager.RequestLevelEntry(levelToEnter, 
-                new RequestParams() { Timeout = 10, Retries = 2, ErrorOnFail = ErrorType.CouldNotConnect }); // basic (recoverable) error state if the request fails
+                new RequestParams() { Timeout = 10, Retries = 2, DefaultErrorOnFail = ErrorType.CouldNotConnect }); // basic (recoverable) error state if the request fails
             if (canEnter)
             {
                 playerEnergyEstimate = myPlayerManager.PlayerData.energy;

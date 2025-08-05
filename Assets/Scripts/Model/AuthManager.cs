@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Network;
 using Presentation.Loading.Screen;
@@ -172,7 +174,7 @@ namespace Model
         private async Task<bool> FetchConfigTask()
         {
            await GameRoot.Instance.ConfigManager.RequestConfig(new RequestParams() 
-               { Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError}); // go into critical error state if the request fails
+               { Timeout = 10, Retries = 1, DefaultErrorOnFail = ErrorType.CriticalError}); // go into critical error state if the request fails
             return GameRoot.Instance.ConfigManager.GameConfig.levels != null;
         }
         
@@ -184,7 +186,7 @@ namespace Model
             if (isNewPlayerWrtClient)
             {
                  await GameRoot.Instance.PlayerManager.RequestNewPlayerCreation(playerID, new RequestParams() 
-                     { Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError}); // go into critical error state if the request fails
+                     { Timeout = 10, Retries = 1, DefaultErrorOnFail = ErrorType.CriticalError}); // go into critical error state if the request fails
             }
             else // the client considers itself an existing user
             {
@@ -192,14 +194,15 @@ namespace Model
                 // this status actually depends on whether there is player data on the data server for this player, which there should be
                 // unless the data server was restarted since the last time the player logged in. So let's check by sending the Get Player request:
                 // if it succeeds, we proceed as an existing player. If it fails with an http status 404, that is fine, and we will proceed as a new player
-                await GameRoot.Instance.PlayerManager.RequestPlayerData(playerID, new RequestParams()
-                    { Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError, IsNotFoundOk = true}); // any fail status other than 404 should go into critical error state
+                bool foundPlayer = await GameRoot.Instance.PlayerManager.RequestPlayerData(playerID, new RequestParams()
+                    { Timeout = 10, Retries = 1, DefaultErrorOnFail = ErrorType.CriticalError, 
+                        CustomHttpStatusBasedErrors = new Dictionary<HttpStatusCode, ErrorType> {[HttpStatusCode.NotFound]  = ErrorType.None}}); // any fail status other than 404 should go into critical error state
                    
                 // ^if the above request failed with a 404 (there was no data stored that can be recovered), proceed as a new player
-                if (string.IsNullOrEmpty(GameRoot.Instance.PlayerManager.PlayerData.playerID))
+                if (!foundPlayer)
                 {
                     await GameRoot.Instance.PlayerManager.RequestNewPlayerCreation(playerID, new RequestParams()
-                        { Timeout = 10, Retries = 1, ErrorOnFail = ErrorType.CriticalError}); // go into critical error state if the request fails
+                        { Timeout = 10, Retries = 1, DefaultErrorOnFail = ErrorType.CriticalError}); // go into critical error state if the request fails
                 }
             }
             
