@@ -101,8 +101,8 @@ namespace Model
                             extraParams.CustomHttpStatusBasedErrors.ContainsKey(statusCode))
                         {
                             errorOnFail = extraParams.CustomHttpStatusBasedErrors[statusCode];
-                            Debug.LogWarning($"http protocol error, response code: {sentRequest.responseCode} reason: {sentRequest.error}");
-                            Debug.LogWarning($"this response has a custom error state {errorOnFail} in the request, will go to that");
+                            Debug.LogWarning($"http protocol error, response code: {sentRequest.responseCode} reason: {sentRequest.error} \n " +
+                                             $"this request has a custom error state {errorOnFail} for this response");
                             markFailure = true;
                             break;
                         }
