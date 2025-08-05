@@ -2,11 +2,12 @@
 
 Welcome to the dice game client! \
 It is meant to be used along with the [backend repository](https://github.com/pluckynumbat/dice-game-backend)
-
+---
 ## Getting Started
 1. Prerequisites: Unity version 6000.0.26f1 or higher
 2. Clone this repo!
 
+---
 ## Part 1. Running the application
 
 ### In the editor:
@@ -18,7 +19,7 @@ It is meant to be used along with the [backend repository](https://github.com/pl
 Note: After starting to play, in case you need to create a fresh player from scratch (new player ID), just clear player prefs between sessions. This can be done in Unity: (`Edit->Clear All PlayerPrefs`) or you can use the debug menu mentioned below.
 
 ### Device builds:
- 1. In Unity, navigate to `File->Build Profiles`, select the platform, and settings, and press 'build'
+ 1. In Unity, navigate to `File->Build Profiles`, select the platform, and settings, and press `Build`
  2. I have tested with macOS standalone builds, and have changed some defaults in the project settings, to have the game open up with a resolution of 768x1024, in a resizable window.
 
 ### Only if connecting to a non localhost backend:
@@ -58,7 +59,7 @@ The managers are plain classes that all handle specific responsibilities. Follow
  - It also orchestrates the loading screen progress bar filling.
 
 ### [StateManager](https://github.com/pluckynumbat/dice-game-client/blob/main/Assets/Scripts/Model/StateManager.cs)
- - This acts as the state machine for the game, and also connects the model to the view via the [ScreenCoordinator](https://github.com/pluckynumbat/dice-game-client/blob/main/Assets/Scripts/Presentation/ScreenCoordinator.cs).
+ - This acts as the state machine for the game, and also connects the model to the presentation layer via the [ScreenCoordinator](https://github.com/pluckynumbat/dice-game-client/blob/main/Assets/Scripts/Presentation/ScreenCoordinator.cs).
  - Changes in state are routed through this manager, which tells the screen coordinator to change screens.
 
 ### [NetRequestManager](https://github.com/pluckynumbat/dice-game-client/blob/main/Assets/Scripts/Model/NetRequestManager.cs)
@@ -74,7 +75,9 @@ The managers are plain classes that all handle specific responsibilities. Follow
 
 ---
 ### [Network/Requests](https://github.com/pluckynumbat/dice-game-client/tree/main/Assets/Scripts/Network)
-These are plain classes representing the client side requests that are sent to the backend. They have definitions of the request / response structs.
+These are plain classes representing the client side of network requests that are sent to the backend. \
+They have definitions of the request / response structs. \
+There is one for each of the backend's public endpoints.
 
 ---
 ### [Presentation/ScreenCoordinator:](https://github.com/pluckynumbat/dice-game-client/blob/main/Assets/Scripts/Presentation/ScreenCoordinator.cs)
