@@ -93,9 +93,9 @@ public class DebugMenu : MonoBehaviour
         GUILayout.EndHorizontal();
         
         GUILayout.BeginHorizontal(GUILayout.MaxWidth(Screen.width));
-        if (GUILayout.Button("Send a Stats Request \n to the server",  GUILayout.MaxWidth(Screen.width * 0.5f), GUILayout.MinHeight(30)))
+        if (GUILayout.Button("Send a Player Data \n Request to the server",  GUILayout.MaxWidth(Screen.width * 0.5f), GUILayout.MinHeight(30)))
         {
-            _ = GameRoot.Instance.PlayerManager.RequestPlayerStats(playerID2, new RequestParams() {Timeout = 5});
+            _ = GameRoot.Instance.PlayerManager.RequestPlayerData(playerID2, new RequestParams() {Timeout = 5});
         }
         playerID2 = GUILayout.TextArea(playerID2);
         GUILayout.EndHorizontal();
