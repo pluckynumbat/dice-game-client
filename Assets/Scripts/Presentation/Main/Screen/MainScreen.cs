@@ -86,9 +86,16 @@ namespace Presentation.Main.Screen
             }
 
             playButton.interactable = false;
+
+            // request level entry: send the level to enter, along with the request params
+            bool canEnter = await myGameplayManager.RequestLevelEntry(levelToEnter,
+                new RequestParams() { Timeout = 10, Retries = 2, DefaultErrorOnFail = ErrorType.CouldNotConnect,
+                    CustomHttpStatusBasedErrors = new Dictionary<HttpStatusCode, ErrorType>()
+                    {
+                        [HttpStatusCode.BadRequest] = ErrorType.CriticalError,
+                        [HttpStatusCode.InternalServerError] = ErrorType.CriticalError,
+                    }}); // basic (recoverable) error state if the request fails, unless it fails with http 400 or 500
             
-            bool canEnter = await myGameplayManager.RequestLevelEntry(levelToEnter, 
-                new RequestParams() { Timeout = 10, Retries = 2, DefaultErrorOnFail = ErrorType.CouldNotConnect }); // basic (recoverable) error state if the request fails
             if (canEnter)
             {
                 playerEnergyEstimate = myPlayerManager.PlayerData.energy;
