@@ -123,7 +123,6 @@ namespace Presentation.Main.Screen
                     energyPresenter.GainEnergy(1);
                 }
             }
-            return;
         }
     }
 }
