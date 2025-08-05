@@ -28,6 +28,7 @@ Note: After starting to play, in case you need to create a fresh player from scr
 2. That can be changed to an ip address. (Tested this on a local network)
 3. For the editor (or development builds) to be able to communicate with the non localhost backend, there is a player setting (in Unity: `Edit->Project Settings->Player Tab->Other Settings`) called `Allow downloads over HTTP`. That has to be changed from `Not Allowed` to `Allowed in development builds`.
 4. For non-development builds, the above `Allow downloads over HTTP` setting has to be changed to `Always allowed`.
+5. Check out backend considerations [if accepting requests from non localhost clients](https://github.com/pluckynumbat/dice-game-backend?tab=readme-ov-file#only-if-accepting-requests-from-non-localhost-clients)
 
 ---
 ### All the information you need to run is above, and the following is just more context about the various details!
