@@ -26,7 +26,8 @@ namespace Model
             PlayerData = responseData;
         }
         
-        public async Task RequestPlayerData(string playerID, RequestParams extraParams)
+        // returns true/ false based on whether we were able to get the data for the required player ID
+        public async Task<bool> RequestPlayerData(string playerID, RequestParams extraParams)
         {
             PlayerDataRequest request = new PlayerDataRequest();
             PlayerData responseData = await request.Send(playerID, extraParams);
@@ -34,10 +35,11 @@ namespace Model
             if (string.IsNullOrEmpty(responseData.playerID))
             {
                 Debug.LogWarning("could not get the player data :(");
-                return;
+                return false;
             }
             
             PlayerData = responseData;
+            return true;
         }
         
         public async Task RequestPlayerStats(string playerID, RequestParams extraParams)
