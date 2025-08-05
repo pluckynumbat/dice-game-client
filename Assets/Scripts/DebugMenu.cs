@@ -18,8 +18,8 @@ public class DebugMenu : MonoBehaviour
     private string password2 = "password";
 
     private string playerID1 = "player id";
-    
     private string playerID2 = "player id";
+    private string playerID3 = "player id";
 
     private void Awake()
     {
@@ -79,15 +79,10 @@ public class DebugMenu : MonoBehaviour
             _ = GameRoot.Instance.ConfigManager.RequestConfig( new RequestParams() {Timeout = 5});
         }
         
-        if (GUILayout.Button("Send a New Player Request to the server",  GUILayout.MaxWidth(Screen.width)))
-        {
-            _ = GameRoot.Instance.PlayerManager.RequestNewPlayerCreation("test1234", new RequestParams() {Timeout = 5});
-        }
-        
         GUILayout.BeginHorizontal(GUILayout.MaxWidth(Screen.width));
-        if (GUILayout.Button("Send a Player Data \n Request to the server",  GUILayout.MaxWidth(Screen.width * 0.5f), GUILayout.MinHeight(30)))
+        if (GUILayout.Button("Send a New Player \n Request to the server",  GUILayout.MaxWidth(Screen.width * 0.5f), GUILayout.MinHeight(30)))
         {
-            _ = GameRoot.Instance.PlayerManager.RequestPlayerStats(playerID1, new RequestParams() {Timeout = 5});
+            _ = GameRoot.Instance.PlayerManager.RequestNewPlayerCreation(playerID1, new RequestParams() {Timeout = 5});
         }
         playerID1 = GUILayout.TextArea(playerID1);
         GUILayout.EndHorizontal();
@@ -98,6 +93,14 @@ public class DebugMenu : MonoBehaviour
             _ = GameRoot.Instance.PlayerManager.RequestPlayerData(playerID2, new RequestParams() {Timeout = 5});
         }
         playerID2 = GUILayout.TextArea(playerID2);
+        GUILayout.EndHorizontal();
+        
+        GUILayout.BeginHorizontal(GUILayout.MaxWidth(Screen.width));
+        if (GUILayout.Button("Send a Stats Request \n to the server",  GUILayout.MaxWidth(Screen.width * 0.5f), GUILayout.MinHeight(30)))
+        {
+            _ = GameRoot.Instance.PlayerManager.RequestPlayerStats(playerID3, new RequestParams() {Timeout = 5});
+        }
+        playerID3 = GUILayout.TextArea(playerID3);
         GUILayout.EndHorizontal();
         
         if (GUILayout.Button("Send an Enter Level Request to the server",  GUILayout.MaxWidth(Screen.width)))
