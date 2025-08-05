@@ -29,3 +29,15 @@ Note: After starting to play, in case you need to create a fresh player from scr
 
 ---
 ### All the information you need to run is above, and the following is just more context about the various details!
+
+---
+## Part 2. More Settings
+
+### Constants:
+The [constants](https://github.com/pluckynumbat/dice-game-client/blob/main/Assets/Scripts/Constants.cs) file (located at `project-root/Assets/scripts/Constants.cs`) holds settings like port numbers for the services which you might want to change if needed.
+If changed, the [constants file in the backend repo](https://github.com/pluckynumbat/dice-game-backend/blob/main/internal/shared/constants/constants.go) should also be changed in the same way.
+
+### Debug Menu (for development):
+The Debug Menu is accessible in the editor builds (and on macOS standalone builds) by pressing the `D` key. I created this to help me out during the development process. It has a bunch of options to make different requests to the backend, change screens, delete player prefs etc. 
+
+---
