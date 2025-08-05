@@ -22,6 +22,7 @@ namespace Presentation.Stats.Presenters
         {
             bool noStatsToShow = statsArray == null || statsArray.Length == 0;
             
+            // only one of the following 2 should be active at any point
             noStatsYetGameObject?.SetActive(noStatsToShow);
             statsEntryContainerTransform?.gameObject.SetActive(!noStatsToShow);
             
