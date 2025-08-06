@@ -23,12 +23,16 @@ Note: After starting to play, in case you need to create a fresh player from scr
  1. In Unity, navigate to `File->Build Profiles`, select the platform, and settings, and press `Build`
  2. I have tested with macOS standalone builds, and have changed some defaults in the project settings, to have the game open up with a resolution of 768x1024, in a resizable window.
 
+### If you need to change port numbers:
+1. The [constants](https://github.com/pluckynumbat/dice-game-client/blob/main/Assets/Scripts/Constants.cs) file (located at `project-root/Assets/scripts/Constants.cs`) contains port numbers set for the services, which you can change.
+2. If changed, the [constants file in the backend repo](https://github.com/pluckynumbat/dice-game-backend/blob/main/internal/shared/constants/constants.go) should also be changed in the same way.
+
 ### Only if connecting to a non localhost backend:
 1. The default backend is localhost, and that is set in the Constants file [here](https://github.com/pluckynumbat/dice-game-client/blob/main/Assets/Scripts/Constants.cs#L9) as the ServerHost property. (The file is located at: `project-root/Assets/scripts/Constants.cs`).
 2. That can be changed to an ip address. (Tested this on a local network)
 3. For the editor (or development builds) to be able to communicate with the non localhost backend, there is a player setting (in Unity: `Edit->Project Settings->Player Tab->Other Settings`) called `Allow downloads over HTTP`. That has to be changed from `Not Allowed` to `Allowed in development builds`.
 4. For non-development builds, the above `Allow downloads over HTTP` setting has to be changed to `Always allowed`.
-5. Check out backend considerations [if accepting requests from non localhost clients](https://github.com/pluckynumbat/dice-game-backend?tab=readme-ov-file#only-if-accepting-requests-from-non-localhost-clients)
+5. Check out backend considerations [if accepting requests from non localhost clients](https://github.com/pluckynumbat/dice-game-backend?tab=readme-ov-file#only-if-accepting-requests-from-non-localhost-clients-for-either-mode)
 
 ---
 ### All the information you need to run is above, and the following is just more context about the various details!
